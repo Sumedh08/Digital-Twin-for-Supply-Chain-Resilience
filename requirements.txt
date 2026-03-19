@@ -2,13 +2,14 @@
 fastapi==0.115.6
 uvicorn==0.34.0
 pydantic==2.10.5
+python-multipart>=0.0.9
 
 # Async HTTP & WebSockets (for ETS API and AIS)
 httpx>=0.25.0
 websockets>=12.0
 
 # AI/ML Dependencies
-torch==2.5.1
+torch>=2.4.0
 networkx==3.4.2
 stable-baselines3==2.4.0
 gymnasium==1.0.0
@@ -17,13 +18,12 @@ shimmy==2.0.0
 # PDF Report Generation
 reportlab>=4.0.0
 
-# Optional: LLM Integration (uncomment if using Groq/HuggingFace)
+# Optional: LLM Integration
 # langchain>=0.3.0
 # langchain-groq>=0.2.0
 # langchain-huggingface>=0.1.0
 # huggingface-hub>=0.20.0
 # sentence-transformers>=3.0.0
-
 
 # Gemini AI Integration
 groq>=0.9.0

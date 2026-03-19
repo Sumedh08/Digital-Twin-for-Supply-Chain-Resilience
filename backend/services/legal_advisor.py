@@ -102,7 +102,9 @@ CRITICAL INSTRUCTIONS:
             return result
 
         except Exception as e:
-            print(f"Groq Error (Legal): {e}")
+            import traceback
+            print(f"❌ Groq Error (Legal): {str(e)}")
+            print(traceback.format_exc())
             result = self._get_mock_answer(user_query)
             result["confidence"] = "Medium (Fallback - API Error)"
             self._cache[query_hash] = (result, datetime.now())

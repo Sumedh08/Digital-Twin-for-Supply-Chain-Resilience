@@ -60,11 +60,18 @@ class AISentinel:
         live_news = self.get_live_news_rss(context)
         
         if not self.client:
+            # Enhanced Mock with Comparative Data
             result = {
                 "risk_score": 85,
                 "risk_level": "HIGH",
+                "safety_category": "DANGEROUS",
                 "summary": f"Simulated based on context. Live News: {live_news[:100]}...",
                 "recommendation": "Reroute via Cape of Good Hope immediately.",
+                "comparison": [
+                    {"route": "Suez Canal", "risk_score": 92, "category": "EXTREME", "status": "Active Conflict"},
+                    {"route": "IMEC Corridor", "risk_score": 45, "category": "CAUTION", "status": "Geopolitical Tension"},
+                    {"route": "Cape Route", "risk_score": 15, "category": "SAFE", "status": "Stable but Slow"}
+                ],
                 "timestamp": datetime.now().isoformat(),
                 "source": "Mock AI + RSS Search"
             }
@@ -73,18 +80,43 @@ class AISentinel:
             return result
 
         try:
-            print(f"🤖 Calling Groq API for {context} analysis...")
+            print(f"🤖 Calling Groq API for COMPARATIVE {context} analysis...")
             prompt = f"""
-            You are a Maritime Security Analyst. Analyze risk for shipping routes between {route}, specifically focusing on {context}.
+            You are a Maritime Security Analyst. Analyze and COMPARE the risk for the following major corridors between India and Europe:
+            1. Suez Canal Route (via Red Sea)
+            2. IMEC Corridor (Land-Sea bridge via UAE-Israel)
+            3. Cape of Good Hope (Detour around Africa)
+
             Here is the absolute latest LIVE NEWS from the internet:
             {live_news}
             
-            Synthesize this live data and provide a JSON response ONLY (no markdown text outside it):
+            Synthesize this live data and provide a JSON response ONLY:
             {{
-                "risk_score": <integer 0-100>,
+                "risk_score": <overall_max_integer 0-100>,
                 "risk_level": "<LOW|MEDIUM|HIGH|CRITICAL>",
-                "summary": "<2 sentences max integrating the live news>",
-                "recommendation": "<Actionable advice>"
+                "safety_category": "<SAFE|CAUTION|RISKY|DANGEROUS|EXTREME>",
+                "comparison": [
+                    {{
+                        "route": "Suez Canal",
+                        "risk_score": <0-100>,
+                        "category": "<SAFE|CAUTION|RISKY|DANGEROUS|EXTREME>",
+                        "status": "<e.g., Congested, Volatile, Stable>"
+                    }},
+                    {{
+                        "route": "IMEC Corridor",
+                        "risk_score": <0-100>,
+                        "category": "<SAFE|CAUTION|RISKY|DANGEROUS|EXTREME>",
+                        "status": "<e.g., Stable, Tense, Developing>"
+                    }},
+                    {{
+                        "route": "Cape Route",
+                        "risk_score": <0-100>,
+                        "category": "<SAFE|CAUTION|RISKY|DANGEROUS|EXTREME>",
+                        "status": "<e.g., Safe, Slow, Weather-prone>"
+                    }}
+                ],
+                "summary": "<2 sentences max integrating the live news and explaining the primary threat>",
+                "recommendation": "<Actionable advice on which route is objectively best right now>"
             }}
             """
             
@@ -96,8 +128,6 @@ class AISentinel:
             )
             
             content = completion.choices[0].message.content
-            
-            # Bulletproof Regex extraction
             match = re.search(r'\{.*\}', content, re.DOTALL)
             if match:
                 content = match.group(0)
@@ -107,10 +137,12 @@ class AISentinel:
             result = {
                 "risk_score": parsed.get("risk_score", 75),
                 "risk_level": parsed.get("risk_level", "HIGH"),
+                "safety_category": parsed.get("safety_category", "RISKY"),
+                "comparison": parsed.get("comparison", []),
                 "summary": parsed.get("summary", "Analysis completed."),
                 "recommendation": parsed.get("recommendation", "Exercise caution."),
                 "timestamp": datetime.now().isoformat(),
-                "source": "Llama 3.3 70B + Google RSS Data"
+                "source": "Llama 3.3 70B (Comparative Intelligence)"
             }
             
             self._cache = result
@@ -122,6 +154,12 @@ class AISentinel:
             result = {
                 "risk_score": 85,
                 "risk_level": "HIGH",
+                "safety_category": "DANGEROUS",
+                "comparison": [
+                    {"route": "Suez Canal", "risk_score": 85, "category": "DANGEROUS", "status": "Conflict"},
+                    {"route": "IMEC", "risk_score": 50, "category": "CAUTION", "status": "Tense"},
+                    {"route": "Cape", "risk_score": 20, "category": "SAFE", "status": "Stable"}
+                ],
                 "summary": "Simulated Analysis (API Error).",
                 "recommendation": "Reroute via Cape of Good Hope immediately.",
                 "timestamp": datetime.now().isoformat(),

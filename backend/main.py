@@ -129,9 +129,9 @@ async def simulate_routes(params: SimulationParams):
     )
     ai_recommendation = "IMEC Corridor" if ai_choice == 1 else "Suez Canal"
 
-    # --- NETWORK RISK PREDICTION (GNN) ---
+    # --- NETWORK RISK PREDICTION (AI-GNN) ---
     from backend.gnn_model import predict_network_risk
-    gnn_risks = predict_network_risk(
+    gnn_risks = await predict_network_risk(
         params.heatwave_level, 
         params.conflict_level, 
         params.piracy_level, 
