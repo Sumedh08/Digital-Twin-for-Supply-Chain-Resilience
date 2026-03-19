@@ -8,12 +8,7 @@ python-multipart>=0.0.9
 httpx>=0.25.0
 websockets>=12.0
 
-# AI/ML Dependencies
-torch>=2.4.0
-networkx==3.4.2
-stable-baselines3==2.4.0
-gymnasium==1.0.0
-shimmy==2.0.0
+# AI/ML Dependencies removed to save 2GB in deployment size.
 
 # PDF Report Generation
 reportlab>=4.0.0

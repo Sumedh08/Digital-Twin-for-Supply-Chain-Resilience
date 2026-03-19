@@ -35,11 +35,6 @@ yarn-error.log*
 .env
 .env.local
 
-# AI Model files (Allowed for Render deployment)
-# backend/ppo_imec_model.zip
-# *.pkl
-# *.pth
-
 # Temporary files
 *.tmp
 .cache/
