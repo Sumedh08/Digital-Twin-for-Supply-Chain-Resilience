@@ -46,18 +46,13 @@ app = FastAPI(
 # Initialize emission calculator
 emission_calc = EmissionCalculator()
 
-# Train Model on Startup if not exists
+# Train Model on Startup DISABLED for Cloud Deployment (Blocks Port Binding)
 @app.on_event("startup")
 async def startup_event():
-    import os
-    if not os.path.exists("backend/ppo_imec_model.zip"):
-        train_agent()
+    # Only train if specifically requested or locally
+    # if not os.path.exists("backend/ppo_imec_model.zip"):
+    #     train_agent()
     
-    # NOTE: AIS WebSocket service DISABLED
-    # The continuous WebSocket stream floods the event loop and blocks HTTP requests.
-    # Vessel Intelligence now uses /route/analyze (Groq LLaMA 3.3) instead of live AIS data.
-    # To re-enable: uncomment the line below
-    # live_ais_service.start_background_task()
     print("✅ Startup complete (AIS WebSocket disabled - using Route Analyst instead)")
 
 # Enable CORS for React Frontend
