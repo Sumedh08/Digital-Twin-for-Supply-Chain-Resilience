@@ -1,0 +1,445 @@
+{
+    "manufacturing": {
+        "steel_hot_rolled": {
+            "factor": 1.85,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "7208",
+                "7211",
+                "7212"
+            ]
+        },
+        "steel_cold_rolled": {
+            "factor": 2.10,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "7209",
+                "7210"
+            ]
+        },
+        "steel_pipes": {
+            "factor": 1.95,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "7304",
+                "7305",
+                "7306"
+            ]
+        },
+        "steel_wire": {
+            "factor": 1.90,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "7217",
+                "7223"
+            ]
+        },
+        "aluminium_primary": {
+            "factor": 14.5,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "7601"
+            ]
+        },
+        "aluminium_secondary": {
+            "factor": 0.5,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "7602"
+            ]
+        },
+        "aluminium_products": {
+            "factor": 8.0,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB (avg primary/secondary)",
+            "cn_codes": [
+                "7604",
+                "7605",
+                "7606",
+                "7607"
+            ]
+        },
+        "cement_clinker": {
+            "factor": 0.85,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "2523"
+            ]
+        },
+        "cement_portland": {
+            "factor": 0.65,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB (blended)",
+            "cn_codes": [
+                "2523"
+            ]
+        },
+        "ammonia": {
+            "factor": 1.80,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "2814"
+            ]
+        },
+        "urea": {
+            "factor": 0.73,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "3102"
+            ]
+        },
+        "nitric_acid": {
+            "factor": 2.50,
+            "unit": "tCO2/tonne",
+            "source": "IPCC EFDB",
+            "cn_codes": [
+                "2808"
+            ]
+        },
+        "hydrogen_grey": {
+            "factor": 9.0,
+            "unit": "tCO2/tonne",
+            "source": "IEA",
+            "cn_codes": [
+                "2804"
+            ]
+        },
+        "hydrogen_blue": {
+            "factor": 4.5,
+            "unit": "tCO2/tonne",
+            "source": "IEA",
+            "cn_codes": [
+                "2804"
+            ]
+        }
+    },
+    "electricity": {
+        "_metadata": {
+            "unit": "gCO2/kWh",
+            "source": "IEA Emission Factors 2024 / Ember Global Electricity Review 2024",
+            "description": "Grid carbon intensity by country (Scope 2). Used to calculate indirect emissions from electricity consumed during manufacturing."
+        },
+        "india": {
+            "factor": 632,
+            "country_name": "India",
+            "source": "IEA 2024"
+        },
+        "china": {
+            "factor": 544,
+            "country_name": "China",
+            "source": "IEA 2024"
+        },
+        "vietnam": {
+            "factor": 460,
+            "country_name": "Vietnam",
+            "source": "Ember 2024"
+        },
+        "turkey": {
+            "factor": 384,
+            "country_name": "Turkey",
+            "source": "Ember 2024"
+        },
+        "russia": {
+            "factor": 340,
+            "country_name": "Russia",
+            "source": "IEA 2024"
+        },
+        "south_korea": {
+            "factor": 378,
+            "country_name": "South Korea",
+            "source": "IEA 2024"
+        },
+        "japan": {
+            "factor": 432,
+            "country_name": "Japan",
+            "source": "IEA 2024"
+        },
+        "usa": {
+            "factor": 370,
+            "country_name": "United States",
+            "source": "IEA 2024"
+        },
+        "germany": {
+            "factor": 350,
+            "country_name": "Germany",
+            "source": "IEA 2024"
+        },
+        "brazil": {
+            "factor": 61,
+            "country_name": "Brazil",
+            "source": "IEA 2024"
+        },
+        "indonesia": {
+            "factor": 680,
+            "country_name": "Indonesia",
+            "source": "Ember 2024"
+        },
+        "south_africa": {
+            "factor": 870,
+            "country_name": "South Africa",
+            "source": "Ember 2024"
+        },
+        "uk": {
+            "factor": 207,
+            "country_name": "United Kingdom",
+            "source": "IEA 2024"
+        },
+        "france": {
+            "factor": 56,
+            "country_name": "France",
+            "source": "IEA 2024"
+        },
+        "eu_average": {
+            "factor": 230,
+            "country_name": "EU Average",
+            "source": "IEA 2024"
+        }
+    },
+    "electricity_per_tonne": {
+        "_metadata": {
+            "unit": "MWh/tonne product",
+            "source": "IPCC / IEA Industrial Energy Use",
+            "description": "Electricity consumed per tonne of product during manufacturing. Used with grid intensity to calculate Scope 2."
+        },
+        "steel_hot_rolled": 0.58,
+        "steel_cold_rolled": 0.65,
+        "steel_pipes": 0.60,
+        "steel_wire": 0.55,
+        "aluminium_primary": 15.0,
+        "aluminium_secondary": 0.5,
+        "aluminium_products": 8.0,
+        "cement_clinker": 0.11,
+        "cement_portland": 0.10,
+        "ammonia": 0.20,
+        "urea": 0.15,
+        "nitric_acid": 0.08,
+        "hydrogen_grey": 0.10,
+        "hydrogen_blue": 0.80
+    },
+    "transport": {
+        "sea_container": {
+            "factor": 16.14,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0 / Clean Cargo 2024"
+        },
+        "sea_bulk": {
+            "factor": 4.0,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0 / IMO 2024"
+        },
+        "sea_tanker": {
+            "factor": 5.11,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0 / IMO 2024"
+        },
+        "sea_roro": {
+            "factor": 21.3,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0"
+        },
+        "sea_general_cargo": {
+            "factor": 12.2,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0"
+        },
+        "rail_electric": {
+            "factor": 23.0,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0"
+        },
+        "rail_diesel": {
+            "factor": 35.0,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0"
+        },
+        "road_truck": {
+            "factor": 80.0,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0"
+        },
+        "road_truck_india": {
+            "factor": 95.0,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0 (India adjustment)"
+        },
+        "air_freight": {
+            "factor": 560.0,
+            "unit": "gCO2/tonne-km",
+            "source": "GLEC Framework v3.0"
+        }
+    },
+    "ship_types": {
+        "container_ship": {
+            "name": "Container Ship",
+            "transport_mode": "sea_container",
+            "description": "Standard TEU container vessels"
+        },
+        "bulk_carrier": {
+            "name": "Bulk Carrier",
+            "transport_mode": "sea_bulk",
+            "description": "Dry bulk cargo (coal, grain, ore)"
+        },
+        "oil_tanker": {
+            "name": "Oil Tanker",
+            "transport_mode": "sea_tanker",
+            "description": "Crude oil and petroleum products"
+        },
+        "roro_cargo": {
+            "name": "Ro-Ro Cargo",
+            "transport_mode": "sea_roro",
+            "description": "Roll-on/roll-off vehicles and machinery"
+        },
+        "general_cargo": {
+            "name": "General Cargo",
+            "transport_mode": "sea_general_cargo",
+            "description": "Break-bulk and mixed freight"
+        }
+    },
+    "port_handling": {
+        "mundra": {
+            "factor": 0.015,
+            "unit": "tCO2/tonne",
+            "source": "Estimated from port reports"
+        },
+        "jnpt": {
+            "factor": 0.018,
+            "unit": "tCO2/tonne",
+            "source": "Estimated from port reports"
+        },
+        "chennai": {
+            "factor": 0.016,
+            "unit": "tCO2/tonne",
+            "source": "Estimated from port reports"
+        },
+        "rotterdam": {
+            "factor": 0.012,
+            "unit": "tCO2/tonne",
+            "source": "Port of Rotterdam sustainability report"
+        },
+        "hamburg": {
+            "factor": 0.013,
+            "unit": "tCO2/tonne",
+            "source": "Port of Hamburg sustainability report"
+        },
+        "antwerp": {
+            "factor": 0.011,
+            "unit": "tCO2/tonne",
+            "source": "Port of Antwerp sustainability report"
+        },
+        "default": {
+            "factor": 0.015,
+            "unit": "tCO2/tonne",
+            "source": "Industry average"
+        }
+    },
+    "routes": {
+        "INMUN_NLRTM_SUEZ": {
+            "name": "Mumbai -> Rotterdam (Suez Canal)",
+            "distance_nm": 6337,
+            "distance_km": 11735,
+            "segments": [
+                {
+                    "mode": "sea_container",
+                    "distance_km": 11735
+                }
+            ]
+        },
+        "INMUN_NLRTM_IMEC": {
+            "name": "Mumbai -> Rotterdam (IMEC Corridor)",
+            "distance_nm": 5800,
+            "distance_km": 10742,
+            "segments": [
+                {
+                    "mode": "sea_container",
+                    "distance_km": 1890,
+                    "note": "Mumbai -> Jebel Ali"
+                },
+                {
+                    "mode": "rail_electric",
+                    "distance_km": 5200,
+                    "note": "UAE → Israel Rail"
+                },
+                {
+                    "mode": "sea_container",
+                    "distance_km": 3652,
+                    "note": "Haifa → Rotterdam"
+                }
+            ]
+        },
+        "INMUN_NLRTM_CAPE": {
+            "name": "Mumbai -> Rotterdam (Cape of Good Hope)",
+            "distance_nm": 10750,
+            "distance_km": 19910,
+            "segments": [
+                {
+                    "mode": "sea_container",
+                    "distance_km": 19910
+                }
+            ]
+        },
+        "INMUN_DEHAM_SUEZ": {
+            "name": "Mumbai -> Hamburg (Suez Canal)",
+            "distance_nm": 6100,
+            "distance_km": 11296,
+            "segments": [
+                {
+                    "mode": "sea_container",
+                    "distance_km": 11296
+                }
+            ]
+        },
+        "INMAA_NLRTM_SUEZ": {
+            "name": "Chennai → Rotterdam (Suez Canal)",
+            "distance_nm": 8100,
+            "distance_km": 15002,
+            "segments": [
+                {
+                    "mode": "sea_container",
+                    "distance_km": 15002
+                }
+            ]
+        }
+    },
+    "eu_ets": {
+        "current_price_eur": 85.0,
+        "currency": "EUR",
+        "unit": "per tonne CO2",
+        "last_updated": "2026-01-16",
+        "source": "European Environment Agency"
+    },
+    "cbam_sectors": {
+        "iron_steel": {
+            "cn_chapter": "72-73",
+            "description": "Iron, steel and articles thereof"
+        },
+        "aluminium": {
+            "cn_chapter": "76",
+            "description": "Aluminium and articles thereof"
+        },
+        "cement": {
+            "cn_chapter": "2523",
+            "description": "Portland cement, aluminous cement, slag cement"
+        },
+        "fertilizers": {
+            "cn_chapter": "28-31",
+            "description": "Fertilizers including ammonia, urea, nitric acid"
+        },
+        "hydrogen": {
+            "cn_chapter": "2804",
+            "description": "Hydrogen"
+        },
+        "electricity": {
+            "cn_chapter": "2716",
+            "description": "Electrical energy"
+        }
+    }
+}

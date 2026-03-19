@@ -1,0 +1,320 @@
+{
+  "network": "hardhat",
+  "contractAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "deployedAt": "2026-03-19T07:17:53.629Z",
+  "abi": [
+    {
+      "type": "constructor",
+      "stateMutability": "undefined",
+      "payable": false,
+      "inputs": []
+    },
+    {
+      "type": "event",
+      "anonymous": false,
+      "name": "EmissionRecorded",
+      "inputs": [
+        {
+          "type": "string",
+          "name": "shipmentId",
+          "indexed": true
+        },
+        {
+          "type": "string",
+          "name": "exporter",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "totalCO2Kg",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "cbamTaxEurCents",
+          "indexed": false
+        },
+        {
+          "type": "address",
+          "name": "recordedBy",
+          "indexed": false
+        },
+        {
+          "type": "uint256",
+          "name": "timestamp",
+          "indexed": false
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "allShipmentIds",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ],
+      "outputs": [
+        {
+          "type": "string",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getEmission",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_shipmentId"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "string",
+          "name": "exporter"
+        },
+        {
+          "type": "string",
+          "name": "product"
+        },
+        {
+          "type": "uint256",
+          "name": "weightTonnes"
+        },
+        {
+          "type": "uint256",
+          "name": "totalCO2Kg"
+        },
+        {
+          "type": "uint256",
+          "name": "cbamTaxEurCents"
+        },
+        {
+          "type": "uint256",
+          "name": "etsPriceEurCents"
+        },
+        {
+          "type": "string",
+          "name": "originPort"
+        },
+        {
+          "type": "string",
+          "name": "destinationPort"
+        },
+        {
+          "type": "address",
+          "name": "recordedBy"
+        },
+        {
+          "type": "uint256",
+          "name": "timestamp"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getRecentShipmentIds",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "count"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "string[]",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getRecordCount",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "owner",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "address",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "recordCount",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": ""
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "recordEmission",
+      "constant": false,
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_shipmentId"
+        },
+        {
+          "type": "string",
+          "name": "_exporter"
+        },
+        {
+          "type": "string",
+          "name": "_product"
+        },
+        {
+          "type": "uint256",
+          "name": "_weightTonnes"
+        },
+        {
+          "type": "uint256",
+          "name": "_totalCO2Kg"
+        },
+        {
+          "type": "uint256",
+          "name": "_cbamTaxEurCents"
+        },
+        {
+          "type": "uint256",
+          "name": "_etsPriceEurCents"
+        },
+        {
+          "type": "string",
+          "name": "_originPort"
+        },
+        {
+          "type": "string",
+          "name": "_destinationPort"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "function",
+      "name": "records",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": ""
+        }
+      ],
+      "outputs": [
+        {
+          "type": "string",
+          "name": "shipmentId"
+        },
+        {
+          "type": "string",
+          "name": "exporter"
+        },
+        {
+          "type": "string",
+          "name": "product"
+        },
+        {
+          "type": "uint256",
+          "name": "weightTonnes"
+        },
+        {
+          "type": "uint256",
+          "name": "totalCO2Kg"
+        },
+        {
+          "type": "uint256",
+          "name": "cbamTaxEurCents"
+        },
+        {
+          "type": "uint256",
+          "name": "etsPriceEurCents"
+        },
+        {
+          "type": "string",
+          "name": "originPort"
+        },
+        {
+          "type": "string",
+          "name": "destinationPort"
+        },
+        {
+          "type": "address",
+          "name": "recordedBy"
+        },
+        {
+          "type": "uint256",
+          "name": "timestamp"
+        },
+        {
+          "type": "bool",
+          "name": "exists"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "verifyRecord",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [
+        {
+          "type": "string",
+          "name": "_shipmentId"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "bool",
+          "name": "exists"
+        },
+        {
+          "type": "uint256",
+          "name": "timestamp"
+        },
+        {
+          "type": "address",
+          "name": "recordedBy"
+        }
+      ]
+    }
+  ]
+}

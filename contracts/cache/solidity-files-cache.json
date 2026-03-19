@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "C:\\Users\\lekha\\Downloads\\Sumedh_Proj\\contracts\\src\\CBAMRegistry.sol": {
+      "lastModificationDate": 1773904120283,
+      "contentHash": "d58c0096cab143d7ddabdb53f279793b",
+      "sourceName": "src/CBAMRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "CBAMRegistry"
+      ]
+    }
+  }
+}

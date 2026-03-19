@@ -1,0 +1,294 @@
+{
+    "steel": {
+        "tata_steel_jamshedpur": {
+            "name": "Tata Steel",
+            "location": "Jamshedpur, Jharkhand",
+            "capacity_mtpa": 13.5,
+            "energy_mix": "coal_dominant",
+            "emission_intensity": 2.1,
+            "nearest_port": "haldia",
+            "certifications": [
+                "ISO 14001",
+                "ResponsibleSteel"
+            ],
+            "products": [
+                "steel_hot_rolled",
+                "steel_cold_rolled",
+                "steel_pipes"
+            ]
+        },
+        "jsw_steel_bellary": {
+            "name": "JSW Steel",
+            "location": "Vijayanagar, Karnataka",
+            "capacity_mtpa": 18.0,
+            "energy_mix": "mixed_coal_renewable",
+            "emission_intensity": 2.0,
+            "nearest_port": "mangalore",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "steel_hot_rolled",
+                "steel_cold_rolled"
+            ]
+        },
+        "sail_bhilai": {
+            "name": "Steel Authority of India (SAIL)",
+            "location": "Bhilai, Chhattisgarh",
+            "capacity_mtpa": 7.5,
+            "energy_mix": "coal_dominant",
+            "emission_intensity": 2.5,
+            "nearest_port": "visakhapatnam",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "steel_hot_rolled",
+                "steel_pipes",
+                "steel_wire"
+            ]
+        },
+        "jsw_dolvi": {
+            "name": "JSW Steel Dolvi",
+            "location": "Dolvi, Maharashtra",
+            "capacity_mtpa": 10.0,
+            "energy_mix": "mixed_coal_renewable",
+            "emission_intensity": 1.9,
+            "nearest_port": "jnpt",
+            "certifications": [
+                "ISO 14001",
+                "ResponsibleSteel"
+            ],
+            "products": [
+                "steel_hot_rolled",
+                "steel_cold_rolled"
+            ]
+        },
+        "amns_hazira": {
+            "name": "ArcelorMittal Nippon Steel",
+            "location": "Hazira, Gujarat",
+            "capacity_mtpa": 9.0,
+            "energy_mix": "coal_dominant",
+            "emission_intensity": 2.05,
+            "nearest_port": "hazira",
+            "certifications": [
+                "ISO 14001",
+                "ResponsibleSteel"
+            ],
+            "products": [
+                "steel_hot_rolled",
+                "steel_cold_rolled",
+                "steel_pipes"
+            ]
+        },
+        "essar_hazira": {
+            "name": "Essar Steel (AMNS)",
+            "location": "Hazira, Gujarat",
+            "capacity_mtpa": 10.0,
+            "energy_mix": "coal_gas_mixed",
+            "emission_intensity": 2.0,
+            "nearest_port": "hazira",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "steel_hot_rolled",
+                "steel_pipes"
+            ]
+        }
+    },
+    "aluminium": {
+        "hindalco_renukoot": {
+            "name": "Hindalco Industries",
+            "location": "Renukoot, Uttar Pradesh",
+            "capacity_mtpa": 1.3,
+            "energy_mix": "captive_coal_power",
+            "emission_intensity": 16.5,
+            "nearest_port": "haldia",
+            "certifications": [
+                "ASI Certified"
+            ],
+            "products": [
+                "aluminium_primary",
+                "aluminium_products"
+            ]
+        },
+        "vedanta_jharsuguda": {
+            "name": "Vedanta Aluminium",
+            "location": "Jharsuguda, Odisha",
+            "capacity_mtpa": 2.3,
+            "energy_mix": "captive_coal_power",
+            "emission_intensity": 17.0,
+            "nearest_port": "paradip",
+            "certifications": [
+                "ASI Certified"
+            ],
+            "products": [
+                "aluminium_primary"
+            ]
+        },
+        "nalco_angul": {
+            "name": "National Aluminium Company (NALCO)",
+            "location": "Angul, Odisha",
+            "capacity_mtpa": 0.46,
+            "energy_mix": "captive_coal_power",
+            "emission_intensity": 16.0,
+            "nearest_port": "paradip",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "aluminium_primary",
+                "aluminium_products"
+            ]
+        },
+        "hindalco_hirakud": {
+            "name": "Hindalco Hirakud",
+            "location": "Hirakud, Odisha",
+            "capacity_mtpa": 0.25,
+            "energy_mix": "captive_coal_power",
+            "emission_intensity": 15.5,
+            "nearest_port": "paradip",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "aluminium_primary"
+            ]
+        },
+        "vedanta_lanjigarh": {
+            "name": "Vedanta Lanjigarh",
+            "location": "Lanjigarh, Odisha",
+            "capacity_mtpa": 2.0,
+            "energy_mix": "captive_coal_power",
+            "emission_intensity": 16.8,
+            "nearest_port": "visakhapatnam",
+            "certifications": [
+                "ASI Certified"
+            ],
+            "products": [
+                "aluminium_primary"
+            ]
+        }
+    },
+    "cement": {
+        "ultratech_aditya": {
+            "name": "UltraTech Cement",
+            "location": "Multiple (Aditya Birla)",
+            "capacity_mtpa": 130.0,
+            "energy_mix": "coal_waste_heat",
+            "emission_intensity": 0.82,
+            "nearest_port": "mundra",
+            "certifications": [
+                "ISO 14001",
+                "GCCA Member"
+            ],
+            "products": [
+                "cement_clinker",
+                "cement_portland"
+            ]
+        },
+        "acc_cement": {
+            "name": "ACC Limited",
+            "location": "Multiple (Holcim)",
+            "capacity_mtpa": 35.0,
+            "energy_mix": "coal_alternative_fuels",
+            "emission_intensity": 0.78,
+            "nearest_port": "jnpt",
+            "certifications": [
+                "ISO 14001",
+                "GCCA Member"
+            ],
+            "products": [
+                "cement_clinker",
+                "cement_portland"
+            ]
+        },
+        "ambuja_cement": {
+            "name": "Ambuja Cement",
+            "location": "Multiple (Adani)",
+            "capacity_mtpa": 31.0,
+            "energy_mix": "coal_waste_heat",
+            "emission_intensity": 0.80,
+            "nearest_port": "mundra",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "cement_clinker",
+                "cement_portland"
+            ]
+        }
+    },
+    "fertilizers": {
+        "iffco_kalol": {
+            "name": "IFFCO",
+            "location": "Kalol, Gujarat",
+            "capacity_mtpa": 2.5,
+            "energy_mix": "natural_gas",
+            "emission_intensity": 1.6,
+            "nearest_port": "kandla",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "ammonia",
+                "urea"
+            ]
+        },
+        "nfl_bathinda": {
+            "name": "National Fertilizers Ltd",
+            "location": "Bathinda, Punjab",
+            "capacity_mtpa": 1.2,
+            "energy_mix": "natural_gas",
+            "emission_intensity": 1.75,
+            "nearest_port": "mundra",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "ammonia",
+                "urea"
+            ]
+        },
+        "rcf_thal": {
+            "name": "Rashtriya Chemicals & Fertilizers",
+            "location": "Thal, Maharashtra",
+            "capacity_mtpa": 1.0,
+            "energy_mix": "natural_gas",
+            "emission_intensity": 1.7,
+            "nearest_port": "jnpt",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "ammonia",
+                "urea",
+                "nitric_acid"
+            ]
+        },
+        "chambal_gadepan": {
+            "name": "Chambal Fertilizers",
+            "location": "Gadepan, Rajasthan",
+            "capacity_mtpa": 2.8,
+            "energy_mix": "natural_gas",
+            "emission_intensity": 1.55,
+            "nearest_port": "kandla",
+            "certifications": [
+                "ISO 14001"
+            ],
+            "products": [
+                "urea"
+            ]
+        }
+    },
+    "metadata": {
+        "last_updated": "2026-01-28",
+        "data_source": "Industry reports, company annual reports, MoEFCC data",
+        "units": {
+            "capacity_mtpa": "Million Tonnes Per Annum",
+            "emission_intensity": "tCO2 per tonne of product"
+        },
+        "notes": "Emission intensities are estimates based on energy mix and industry averages. Actual verified data should be obtained from manufacturers for compliance."
+    }
+}

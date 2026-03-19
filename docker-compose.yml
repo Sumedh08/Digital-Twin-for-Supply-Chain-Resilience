@@ -1,0 +1,46 @@
+# CarbonShip Docker Compose
+# Full stack deployment: Backend + Frontend
+
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: carbonship-api
+    ports:
+      - "8000:8000"
+    environment:
+      - CARBONSHIP_SECRET_KEY=${CARBONSHIP_SECRET_KEY:-default-secret-key-change-in-production}
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend/data:/app/backend/data
+      - ./backend/reports:/app/backend/reports
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # React Frontend (for development)
+  frontend:
+    image: node:18-alpine
+    container_name: carbonship-ui
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev -- --host
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+
+networks:
+  default:
+    name: carbonship-network

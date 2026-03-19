@@ -1,0 +1,29 @@
+=== EU CARBON BORDER ADJUSTMENT MECHANISM (CBAM) ===
+Regulation (EU) 2023/956 of the European Parliament
+
+ARTICLE 1 - SUBJECT MATTER
+This Regulation establishes a carbon border adjustment mechanism (CBAM) for addressing greenhouse gas emissions embedded in the goods listed in Annex I upon their importation into the customs territory of the Union.
+
+ARTICLE 2 - SCOPE
+Applies to goods listed in Annex I:
+- Iron and Steel: CN 7206-7229
+- Aluminium: CN 7601-7616 
+- Cement: CN 2523
+- Fertilisers: CN 2808, 2814, 3102-3105
+- Electricity: CN 2716
+- Hydrogen: CN 2804
+
+ARTICLE 6 - CBAM CERTIFICATE OBLIGATIONS
+Each authorized CBAM declarant shall, by 31 May of each year, surrender a number of CBAM certificates corresponding to the embedded emissions in goods imported during the preceding calendar year.
+
+TRANSITIONAL PERIOD (Oct 2023 - Dec 2025):
+- Importers must report embedded emissions quarterly.
+- No financial obligation during this period.
+- Default values may be used for up to 100% of emissions.
+
+DEFINITIVE PERIOD (from Jan 2026):
+- Financial obligations commence. CBAM certificates must be purchased.
+
+EXEMPTIONS (Article 2):
+- Goods originating in Iceland, Liechtenstein, Norway, Switzerland.
+- Goods with total value below EUR 150 in a consignment.

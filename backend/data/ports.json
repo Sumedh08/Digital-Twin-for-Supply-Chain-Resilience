@@ -1,0 +1,473 @@
+{
+    "indian_ports": {
+        "mundra": {
+            "name": "Mundra Port",
+            "code": "INMUN",
+            "lat": 22.8389,
+            "lng": 69.7222,
+            "state": "Gujarat",
+            "type": "Major Private Port",
+            "handling_factor": 0.015,
+            "annual_capacity_mt": 250,
+            "cbam_exports": [
+                "steel",
+                "aluminium",
+                "cement"
+            ],
+            "nearest_cities": [
+                "Ahmedabad",
+                "Rajkot"
+            ]
+        },
+        "jnpt": {
+            "name": "Jawaharlal Nehru Port (Nhava Sheva)",
+            "code": "INNSA",
+            "lat": 18.9500,
+            "lng": 72.9500,
+            "state": "Maharashtra",
+            "type": "Major Government Port",
+            "handling_factor": 0.018,
+            "annual_capacity_mt": 85,
+            "cbam_exports": [
+                "steel",
+                "aluminium",
+                "chemicals"
+            ],
+            "nearest_cities": [
+                "Mumbai",
+                "Pune"
+            ]
+        },
+        "chennai": {
+            "name": "Chennai Port",
+            "code": "INMAA",
+            "lat": 13.0827,
+            "lng": 80.2707,
+            "state": "Tamil Nadu",
+            "type": "Major Government Port",
+            "handling_factor": 0.016,
+            "annual_capacity_mt": 55,
+            "cbam_exports": [
+                "steel",
+                "aluminium"
+            ],
+            "nearest_cities": [
+                "Chennai",
+                "Coimbatore"
+            ]
+        },
+        "kandla": {
+            "name": "Deendayal Port (Kandla)",
+            "code": "INKAN",
+            "lat": 23.0333,
+            "lng": 70.2167,
+            "state": "Gujarat",
+            "type": "Major Government Port",
+            "handling_factor": 0.014,
+            "annual_capacity_mt": 130,
+            "cbam_exports": [
+                "steel",
+                "fertilizers",
+                "cement"
+            ],
+            "nearest_cities": [
+                "Gandhidham",
+                "Bhuj"
+            ]
+        },
+        "visakhapatnam": {
+            "name": "Visakhapatnam Port",
+            "code": "INVTZ",
+            "lat": 17.6868,
+            "lng": 83.2185,
+            "state": "Andhra Pradesh",
+            "type": "Major Government Port",
+            "handling_factor": 0.015,
+            "annual_capacity_mt": 75,
+            "cbam_exports": [
+                "steel",
+                "aluminium",
+                "fertilizers"
+            ],
+            "nearest_cities": [
+                "Visakhapatnam",
+                "Vijayawada"
+            ]
+        },
+        "paradip": {
+            "name": "Paradip Port",
+            "code": "INPRT",
+            "lat": 20.2667,
+            "lng": 86.6167,
+            "state": "Odisha",
+            "type": "Major Government Port",
+            "handling_factor": 0.014,
+            "annual_capacity_mt": 130,
+            "cbam_exports": [
+                "steel",
+                "aluminium",
+                "fertilizers"
+            ],
+            "nearest_cities": [
+                "Bhubaneswar",
+                "Cuttack"
+            ]
+        },
+        "haldia": {
+            "name": "Haldia Dock Complex",
+            "code": "INHAL",
+            "lat": 22.0300,
+            "lng": 88.0600,
+            "state": "West Bengal",
+            "type": "Major Government Port",
+            "handling_factor": 0.017,
+            "annual_capacity_mt": 45,
+            "cbam_exports": [
+                "steel",
+                "aluminium"
+            ],
+            "nearest_cities": [
+                "Kolkata",
+                "Howrah"
+            ]
+        },
+        "hazira": {
+            "name": "Hazira Port",
+            "code": "INHAZ",
+            "lat": 21.1167,
+            "lng": 72.6333,
+            "state": "Gujarat",
+            "type": "Private Port (Adani)",
+            "handling_factor": 0.013,
+            "annual_capacity_mt": 50,
+            "cbam_exports": [
+                "steel",
+                "chemicals"
+            ],
+            "nearest_cities": [
+                "Surat",
+                "Vadodara"
+            ]
+        },
+        "pipavav": {
+            "name": "APM Terminals Pipavav",
+            "code": "INPIP",
+            "lat": 20.9167,
+            "lng": 71.5167,
+            "state": "Gujarat",
+            "type": "Private Port (APM)",
+            "handling_factor": 0.012,
+            "annual_capacity_mt": 20,
+            "cbam_exports": [
+                "steel",
+                "aluminium"
+            ],
+            "nearest_cities": [
+                "Rajkot",
+                "Junagadh"
+            ]
+        },
+        "mangalore": {
+            "name": "New Mangalore Port",
+            "code": "INMNG",
+            "lat": 12.9141,
+            "lng": 74.8560,
+            "state": "Karnataka",
+            "type": "Major Government Port",
+            "handling_factor": 0.015,
+            "annual_capacity_mt": 51,
+            "cbam_exports": [
+                "steel",
+                "aluminium",
+                "fertilizers"
+            ],
+            "nearest_cities": [
+                "Mangalore",
+                "Udupi"
+            ]
+        },
+        "cochin": {
+            "name": "Cochin Port",
+            "code": "INCOK",
+            "lat": 9.9312,
+            "lng": 76.2673,
+            "state": "Kerala",
+            "type": "Major Government Port",
+            "handling_factor": 0.016,
+            "annual_capacity_mt": 40,
+            "cbam_exports": [
+                "aluminium",
+                "fertilizers"
+            ],
+            "nearest_cities": [
+                "Kochi",
+                "Ernakulam"
+            ]
+        },
+        "tuticorin": {
+            "name": "V.O. Chidambaranar Port (Tuticorin)",
+            "code": "INTUT",
+            "lat": 8.7642,
+            "lng": 78.1348,
+            "state": "Tamil Nadu",
+            "type": "Major Government Port",
+            "handling_factor": 0.014,
+            "annual_capacity_mt": 38,
+            "cbam_exports": [
+                "cement",
+                "fertilizers"
+            ],
+            "nearest_cities": [
+                "Tuticorin",
+                "Tirunelveli"
+            ]
+        },
+        "ennore": {
+            "name": "Kamarajar Port (Ennore)",
+            "code": "INENR",
+            "lat": 13.2167,
+            "lng": 80.3167,
+            "state": "Tamil Nadu",
+            "type": "Major Government Port",
+            "handling_factor": 0.013,
+            "annual_capacity_mt": 45,
+            "cbam_exports": [
+                "steel",
+                "cement"
+            ],
+            "nearest_cities": [
+                "Chennai"
+            ]
+        },
+        "krishnapatnam": {
+            "name": "Krishnapatnam Port",
+            "code": "INKRI",
+            "lat": 14.2500,
+            "lng": 80.1333,
+            "state": "Andhra Pradesh",
+            "type": "Private Port (Adani)",
+            "handling_factor": 0.012,
+            "annual_capacity_mt": 75,
+            "cbam_exports": [
+                "steel",
+                "cement",
+                "aluminium"
+            ],
+            "nearest_cities": [
+                "Nellore",
+                "Vijayawada"
+            ]
+        },
+        "gangavaram": {
+            "name": "Gangavaram Port",
+            "code": "INGVP",
+            "lat": 17.6200,
+            "lng": 83.2370,
+            "state": "Andhra Pradesh",
+            "type": "Private Port (Adani)",
+            "handling_factor": 0.012,
+            "annual_capacity_mt": 70,
+            "cbam_exports": [
+                "steel",
+                "aluminium"
+            ],
+            "nearest_cities": [
+                "Visakhapatnam"
+            ]
+        },
+        "dhamra": {
+            "name": "Dhamra Port",
+            "code": "INDHA",
+            "lat": 20.7667,
+            "lng": 86.9500,
+            "state": "Odisha",
+            "type": "Private Port (Adani)",
+            "handling_factor": 0.012,
+            "annual_capacity_mt": 50,
+            "cbam_exports": [
+                "steel",
+                "aluminium"
+            ],
+            "nearest_cities": [
+                "Bhadrak",
+                "Balasore"
+            ]
+        },
+        "mormugao": {
+            "name": "Mormugao Port",
+            "code": "INMRM",
+            "lat": 15.4204,
+            "lng": 73.7918,
+            "state": "Goa",
+            "type": "Major Government Port",
+            "handling_factor": 0.015,
+            "annual_capacity_mt": 17,
+            "cbam_exports": [
+                "steel"
+            ],
+            "nearest_cities": [
+                "Vasco da Gama",
+                "Margao"
+            ]
+        }
+    },
+    "european_ports": {
+        "rotterdam": {
+            "name": "Port of Rotterdam",
+            "code": "NLRTM",
+            "lat": 51.9000,
+            "lng": 4.5000,
+            "country": "Netherlands",
+            "type": "EU Gateway",
+            "handling_factor": 0.012,
+            "cbam_imports": [
+                "steel",
+                "aluminium",
+                "cement",
+                "fertilizers"
+            ]
+        },
+        "hamburg": {
+            "name": "Port of Hamburg",
+            "code": "DEHAM",
+            "lat": 53.5500,
+            "lng": 9.9900,
+            "country": "Germany",
+            "type": "EU Gateway",
+            "handling_factor": 0.013,
+            "cbam_imports": [
+                "steel",
+                "aluminium",
+                "cement"
+            ]
+        },
+        "antwerp": {
+            "name": "Port of Antwerp-Bruges",
+            "code": "BEANR",
+            "lat": 51.2194,
+            "lng": 4.4025,
+            "country": "Belgium",
+            "type": "EU Gateway",
+            "handling_factor": 0.011,
+            "cbam_imports": [
+                "steel",
+                "aluminium",
+                "chemicals"
+            ]
+        },
+        "piraeus": {
+            "name": "Port of Piraeus",
+            "code": "GRPIR",
+            "lat": 37.9400,
+            "lng": 23.6300,
+            "country": "Greece",
+            "type": "Mediterranean Hub",
+            "handling_factor": 0.014,
+            "cbam_imports": [
+                "steel",
+                "aluminium"
+            ]
+        },
+        "genoa": {
+            "name": "Port of Genoa",
+            "code": "ITGOA",
+            "lat": 44.4056,
+            "lng": 8.9463,
+            "country": "Italy",
+            "type": "Mediterranean Hub",
+            "handling_factor": 0.013,
+            "cbam_imports": [
+                "steel",
+                "aluminium"
+            ]
+        },
+        "valencia": {
+            "name": "Port of Valencia",
+            "code": "ESVLC",
+            "lat": 39.4699,
+            "lng": -0.3763,
+            "country": "Spain",
+            "type": "Mediterranean Hub",
+            "handling_factor": 0.013,
+            "cbam_imports": [
+                "steel",
+                "cement"
+            ]
+        },
+        "le_havre": {
+            "name": "Port of Le Havre",
+            "code": "FRLEH",
+            "lat": 49.4944,
+            "lng": 0.1079,
+            "country": "France",
+            "type": "Atlantic Gateway",
+            "handling_factor": 0.012,
+            "cbam_imports": [
+                "steel",
+                "aluminium"
+            ]
+        },
+        "felixstowe": {
+            "name": "Port of Felixstowe",
+            "code": "GBFXT",
+            "lat": 51.9500,
+            "lng": 1.3000,
+            "country": "United Kingdom",
+            "type": "UK Gateway",
+            "handling_factor": 0.013,
+            "cbam_imports": [
+                "steel",
+                "aluminium"
+            ]
+        }
+    },
+    "imec_corridor_ports": {
+        "jebel_ali": {
+            "name": "Jebel Ali Port",
+            "code": "AEJEA",
+            "lat": 25.0000,
+            "lng": 55.0600,
+            "country": "UAE",
+            "type": "IMEC Hub",
+            "handling_factor": 0.010,
+            "note": "Primary IMEC transshipment hub"
+        },
+        "haifa": {
+            "name": "Port of Haifa",
+            "code": "ILHFA",
+            "lat": 32.8000,
+            "lng": 34.9800,
+            "country": "Israel",
+            "type": "IMEC Hub",
+            "handling_factor": 0.012,
+            "note": "IMEC Mediterranean gateway"
+        }
+    },
+    "distances_nm": {
+        "INMUN_NLRTM_SUEZ": 6337,
+        "INMUN_DEHAM_SUEZ": 6100,
+        "INMUN_BEANR_SUEZ": 6200,
+        "INMUN_NLRTM_CAPE": 10750,
+        "INMUN_NLRTM_IMEC": 5800,
+        "INMAA_NLRTM_SUEZ": 8100,
+        "INVTZ_NLRTM_SUEZ": 7600,
+        "INPRT_NLRTM_SUEZ": 7800,
+        "INHAL_NLRTM_SUEZ": 8200,
+        "INKAN_NLRTM_SUEZ": 6100,
+        "INHAZ_NLRTM_SUEZ": 6000
+    },
+    "metadata": {
+        "last_updated": "2026-01-28",
+        "data_sources": [
+            "Indian Ports Association",
+            "Ministry of Ports, Shipping and Waterways",
+            "Port Authority of India",
+            "Sea-Distances.org"
+        ],
+        "units": {
+            "handling_factor": "tCO2 per tonne cargo",
+            "annual_capacity_mt": "Million Tonnes per year",
+            "distances_nm": "Nautical Miles"
+        }
+    }
+}

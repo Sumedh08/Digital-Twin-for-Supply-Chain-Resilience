@@ -1,0 +1,11 @@
+=== WORLD TRADE ORGANIZATION (WTO) RULES ===
+GATT 1994 ARTICLE XX: General Exceptions
+Subject to the requirement that such measures are not applied in a manner which would constitute a means of arbitrary or unjustifiable discrimination between countries where the same conditions prevail, or a disguised restriction on international trade, nothing in this Agreement shall be construed to prevent the adoption or enforcement by any contracting party of measures:
+(b) necessary to protect human, animal or plant life or health;
+(g) relating to the conservation of exhaustible natural resources if such measures are made effective in conjunction with restrictions on domestic production or consumption.
+
+NON-DISCRIMINATION:
+Article I (MFN): Treatment accorded to products of one WTO member must be immediately and unconditionally accorded to like products of all other WTO members.
+Article III (National Treatment): Imported products must not be treated less favourably than like domestic products.
+
+CBAM Context: The EU claims CBAM is justified under Article XX(b) and (g) as an environmental measure to prevent carbon leakage, though trading partners argue it risks violating Article I and III by imposing unequal burdens on developing countries.
