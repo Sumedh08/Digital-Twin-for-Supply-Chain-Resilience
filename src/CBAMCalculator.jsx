@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 
 import { API_BASE } from './config';
+import ParetoChart from './components/ParetoChart';
+import ScenarioManager from './components/ScenarioManager';
 
 function CBAMCalculator({ onRouteSelect }) {
     // State for form inputs
@@ -38,6 +40,47 @@ function CBAMCalculator({ onRouteSelect }) {
     const [comparison, setComparison] = useState(null);
     const [loading, setLoading] = useState(false);
     const [showComparison, setShowComparison] = useState(false);
+    
+    // New Pareto state
+    const [paretoData, setParetoData] = useState(null);
+    const [paretoRec, setParetoRec] = useState(null);
+
+    const handleScenarioComplete = (type, data, scenarioName) => {
+        if (type === 'pareto') {
+            setParetoData(data.pareto_front);
+            setParetoRec(data.balanced_recommendation);
+            setShowComparison(true);
+            setResult(null);
+            
+            // Format for the existing comparison view
+            setComparison({
+                routes: data.pareto_front
+                  .sort((a,b) => a.total_cost_eur - b.total_cost_eur)
+                  .slice(0, 3)
+                  .map((r, i) => ({
+                    rank: i + 1,
+                    route_name: r.route_description,
+                    route_code: r.route,
+                    cbam_tax_eur: r.total_cost_eur,
+                    transit_days: r.transit_days,
+                    is_greenest: i === 0 || r.carbon_wtw_tco2 === Math.min(...data.pareto_front.map(x=>x.carbon_wtw_tco2)),
+                    fuel: r.fuel_type,
+                    speed: r.speed_knots,
+                    label: r.trade_off_label
+                })),
+                recommendation: { 
+                    best_route: data.balanced_recommendation.route_description, 
+                    savings_eur: 'Optimized via TS',
+                    fuel: data.balanced_recommendation.fuel_type,
+                    speed: data.balanced_recommendation.speed_knots
+                }
+            });
+        } else if (type === 'sd_simulation') {
+            // Nothing extra needed, ScenarioManager handles its own SD state display
+            // But we could trigger a refresh of the ETS price
+            setEtsPrice(data.final_state.ets_price_eur);
+        }
+    };
 
     // Fetch all reference data on mount
     useEffect(() => {
@@ -202,6 +245,7 @@ function CBAMCalculator({ onRouteSelect }) {
     const compareRoutes = async () => {
         setLoading(true);
         setShowComparison(true);
+        setParetoData(null); // Clear pareto if doing normal compare
         try {
             const res = await fetch(`${API_BASE}/cbam/compare-routes`, {
                 method: 'POST',
@@ -217,6 +261,32 @@ function CBAMCalculator({ onRouteSelect }) {
             });
             const data = await res.json();
             if (data.success) {
+                // Phase 2: Enrich with Monte Carlo risk bands
+                const enrichedRoutes = await Promise.all(data.routes.map(async (r) => {
+                    try {
+                        let shortRoute = 'suez';
+                        if (r.route_code.includes('IMEC')) shortRoute = 'imec';
+                        if (r.route_code.includes('CAPE')) shortRoute = 'cape';
+                        
+                        const mcRes = await fetch(`${API_BASE}/risk/monte-carlo`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                simulation_month: new Date().getMonth() + 1,
+                                num_simulations: 500,
+                                route: shortRoute,
+                                base_voyage_days: r.transit_days,
+                                base_co2_tonnes: 100 // dummy base for ratio
+                            })
+                        });
+                        const mcData = await mcRes.json();
+                        return { ...r, mc_risk: mcData.success ? mcData.data : null };
+                    } catch (e) {
+                        return r;
+                    }
+                }));
+
+                data.routes = enrichedRoutes;
                 setComparison(data);
                 if (onRouteSelect) {
                     onRouteSelect(data.routes);
@@ -245,6 +315,10 @@ function CBAMCalculator({ onRouteSelect }) {
 
     return (
         <div className="h-full overflow-y-auto p-6 space-y-6">
+            
+            {/* Phase 2: Scenario Manager UI */}
+            <ScenarioManager onScenarioComplete={handleScenarioComplete} />
+            
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-green-500/20 rounded-lg">
@@ -598,7 +672,8 @@ function CBAMCalculator({ onRouteSelect }) {
                                     : 'bg-gray-700/30 border-gray-600'
                                     }`}
                                 onClick={() => {
-                                    setRoute(r.route_code);
+                                    setRoute(r.route_code || route);
+                                    if(r.fuel) setProductType('steel_hot_rolled'); // simple reset
                                     setShowComparison(false);
                                 }}
                             >
@@ -609,14 +684,31 @@ function CBAMCalculator({ onRouteSelect }) {
                                         </span>
                                         <div>
                                             <div className="text-sm text-white">{r.route_name}</div>
-                                            <div className="text-xs text-gray-400">{r.transit_days} days transit</div>
+                                            <div className="text-xs text-gray-400">
+                                                {r.transit_days.toFixed(1)} days transit 
+                                                {r.fuel && ` • ${r.fuel} @ ${r.speed}kn`}
+                                            </div>
+                                            {r.mc_risk && r.mc_risk.probability_any_disruption > 0 && (
+                                                <div className="mt-1 flex items-center gap-2">
+                                                    <div className="text-[10px] bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded border border-red-500/20">
+                                                        {(r.mc_risk.probability_any_disruption * 100).toFixed(0)}% disruption risk
+                                                    </div>
+                                                    <div className="text-[10px] text-gray-500">
+                                                        P95: {(r.mc_risk.p95_delay_days).toFixed(1)}d delay
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="text-right">
                                         <div className={`text-lg font-bold ${r.is_greenest ? 'text-green-400' : 'text-white'}`}>
                                             {formatCurrency(r.cbam_tax_eur)}
                                         </div>
-                                        {r.is_greenest && (
+                                        {r.label ? (
+                                            <span className="text-xs text-purple-400 flex items-center gap-1">
+                                                {r.label}
+                                            </span>
+                                        ) : r.is_greenest && (
                                             <span className="text-xs text-green-400 flex items-center gap-1">
                                                 <Leaf size={12} /> Greenest
                                             </span>
@@ -626,6 +718,13 @@ function CBAMCalculator({ onRouteSelect }) {
                             </div>
                         ))}
                     </div>
+
+                    {/* Phase 2: Pareto Frontier Chart */}
+                    {paretoData && (
+                        <div className="mt-4 border-t border-gray-700 pt-4">
+                            <ParetoChart data={paretoData} recommendation={paretoRec} />
+                        </div>
+                    )}
 
                     <button
                         onClick={() => setShowComparison(false)}

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 import { API_BASE } from '../config';
+import WeatherPanel from './WeatherPanel';
 
 const ROUTES = [
     { code: 'INMUN_NLRTM_SUEZ', name: 'Mumbai → Rotterdam (Suez Canal)', distance: '6,337 nm', days: '~18 days' },
@@ -201,6 +202,11 @@ function VesselTracker({ onVesselSelect }) {
                             </div>
                         </div>
                     )}
+
+                    {/* Live Weather Panel */}
+                    <div className="mb-4">
+                        <WeatherPanel routeCode={selectedRoute} routeName={analysis.route_name} autoFetch={true} />
+                    </div>
 
                     {/* Risk Breakdown */}
                     <div className="space-y-2">
