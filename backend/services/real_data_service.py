@@ -7,13 +7,14 @@ Data Sources:
 - Vessel Names: Real ships from MSC, Evergreen, HMM, OOCL, Maersk
 """
 
-import httpx
 import json
 import random
 from datetime import datetime, timedelta
 from typing import Dict, List
 from dataclasses import dataclass, asdict
 import os
+
+from backend.services.yahoo_finance_client import fetch_chart
 
 
 @dataclass
@@ -29,14 +30,12 @@ class RealDataService:
     """
     Service to fetch REAL data from free public sources
     No API keys required - uses publicly available data
-    Uses SYNCHRONOUS httpx to avoid FastAPI event loop conflicts
+    Uses synchronous yfinance access to avoid event loop conflicts
     """
     
     CACHE_FILE = os.path.join(os.path.dirname(__file__), "..", "data", "real_data_cache.json")
     
-    CARBON_SOURCES = [
-        "https://query1.finance.yahoo.com/v8/finance/chart/CFI2=F",
-    ]
+    CARBON_SYMBOL = "CFI2=F"
     
     def __init__(self):
         self.cache = self._load_cache()
@@ -77,42 +76,31 @@ class RealDataService:
             except Exception:
                 pass
         
-        # Fetch from Yahoo Finance using SYNCHRONOUS client
-        for url in self.CARBON_SOURCES:
-            try:
-                with httpx.Client(timeout=10.0, headers={
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                }) as client:
-                    response = client.get(url)
-                    
-                    if response.status_code == 200:
-                        data = response.json()
-                        result = data.get("chart", {}).get("result", [])
-                        
-                        if result:
-                            meta = result[0].get("meta", {})
-                            price = meta.get("regularMarketPrice", 0)
-                            
-                            if price and price > 0:
-                                real_price = RealCarbonPrice(
-                                    price_eur=round(float(price), 2),
-                                    source="Yahoo Finance (ICE EUA Futures CFI2=F)",
-                                    timestamp=datetime.now().isoformat(),
-                                    is_live=True
-                                )
-                                
-                                # Cache it
-                                self.cache[cache_key] = {
-                                    "data": asdict(real_price),
-                                    "timestamp": datetime.now().isoformat()
-                                }
-                                self._save_cache(self.cache)
-                                
-                                return real_price
-            except Exception as e:
-                print(f"Failed to fetch from {url}: {e}")
-                continue
-        
+        try:
+            payload = fetch_chart(self.CARBON_SYMBOL, range_value="5d")
+            meta = payload.get("meta", {})
+            closes = payload.get("indicators", {}).get("quote", [{}])[0].get("close", [])
+            closes = [float(value) for value in closes if value is not None]
+
+            if closes:
+                price = float(meta.get("regularMarketPrice", closes[-1]))
+                real_price = RealCarbonPrice(
+                    price_eur=round(price, 2),
+                    source="Yahoo Finance chart API (ICE EUA Futures CFI2=F)",
+                    timestamp=datetime.now().isoformat(),
+                    is_live=True
+                )
+
+                self.cache[cache_key] = {
+                    "data": asdict(real_price),
+                    "timestamp": datetime.now().isoformat()
+                }
+                self._save_cache(self.cache)
+
+                return real_price
+        except Exception as e:
+            print(f"Failed to fetch ETS price for {self.CARBON_SYMBOL}: {e}")
+
         # Fallback to recent known price
         return RealCarbonPrice(
             price_eur=68.50,
@@ -209,13 +197,6 @@ class RealDataService:
 
 # Singleton instance
 real_data_service = RealDataService()
-
-
-def get_live_carbon_price() -> Dict:
-    """Get live carbon price as dict"""
-    return asdict(real_data_service.get_real_carbon_price_sync())
-
-
 if __name__ == "__main__":
     print("=" * 50)
     print("REAL DATA SERVICE TEST")

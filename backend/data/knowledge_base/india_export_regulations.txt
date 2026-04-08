@@ -1,0 +1,68 @@
+=== INDIA EXPORT REGULATIONS AND TRADE POLICY ===
+Compiled from: Foreign Trade (Development and Regulation) Act 1992, Foreign Trade Policy 2023, DGFT Notifications
+
+SECTION 1: FOREIGN TRADE (DEVELOPMENT AND REGULATION) ACT, 1992
+
+Section 3 — Powers of Central Government to make provisions relating to imports and exports
+The Central Government may, by Order published in the Official Gazette, make provision for the development and regulation of foreign trade by facilitating imports into, and augmenting exports from, India and for matters connected therewith or incidental thereto.
+
+Section 5 — Importer-Exporter Code (IEC)
+No person shall make any import or export except under an Importer-Exporter Code Number granted by the Director General or the officer authorised by the Director General.
+Exception: Imports/exports exempted under Section 3 for personal use, diplomatic baggage, or goods valued below the prescribed threshold.
+
+Section 11 — Penalties
+Any person who makes any import or export in contravention of any Order or provision shall be liable to a penalty not exceeding five times the value of the goods or Rs. 10,000, whichever is more, as adjudicated by the Adjudicating Authority.
+
+SECTION 2: FOREIGN TRADE POLICY (FTP) 2023
+
+Chapter 1 — General Provisions
+1.01: Directorate General of Foreign Trade (DGFT) is the licensing authority for all imports and exports.
+1.02: The Policy is effective from April 1, 2023 and remains valid until replaced by a new policy.
+
+Chapter 2 — General Provisions Regarding Imports and Exports
+2.01: Exports and Imports shall be free, except when regulated by way of prohibition, restriction or exclusive trading through State Trading Enterprises.
+2.08: Export of SCOMET (Dual-Use) items requires a DGFT licence.
+2.46: BIS certification required for goods under Quality Control Orders before export.
+
+Chapter 4 — Duty Exemption and Remission Schemes
+4.03 Advance Authorisation: An Advance Authorisation is issued for duty-free import of inputs required for manufacture of export products. Value addition must be positive with minimum 15% VA for physical exports.
+4.13 Duty-Free Import Authorisation (DFIA): Similar to Advance Authorisation but transferable after export obligation is met.
+
+Chapter 5 — Export Promotion Capital Goods (EPCG) Scheme
+5.01: Allows import of capital goods at zero customs duty for export production. Export obligation is 6 times the duty saved, to be fulfilled within 6 years.
+
+SECTION 3: STEEL AND IRON ORE EXPORT PROVISIONS
+
+Steel Export Duty (as of FTP 2023):
+- Hot-Rolled Coil (HRC) — HS Code 7208: Currently zero export duty (reduced from 15% in Nov 2022).
+- Cold-Rolled Coil (CRC) — HS Code 7209: Zero export duty.
+- Stainless Steel — HS Code 7219/7220: Zero export duty.
+- Iron Ore Pellets — HS Code 2601: Export duty of 0-30% depending on iron content (>58% Fe attracts higher duty).
+- Iron Ore Fines — HS Code 2601: Export duty ranges from 0% to 50% depending on iron content and government notifications.
+
+Quality Control Orders (QCO):
+- BIS certification mandatory for steel products sold domestically and certain export categories.
+- IS 2062 (Hot Rolled Medium and High Tensile Structural Steel) applies to structural steel exports.
+- IS 1079 (Hot Rolled Carbon Steel Sheet and Strip) applies to HRC exports to specific markets.
+
+SECTION 4: INDIA CUSTOMS ACT, 1962 — EXPORT PROVISIONS
+
+Section 50 — Entry of Goods for Export
+All goods intended for export must be entered by making a Shipping Bill or a Bill of Export in prescribed form.
+
+Section 51 — Clearance of Goods for Export
+The proper officer must be satisfied that:
+(a) the goods are not prohibited for export under the Customs Act or any other law.
+(b) the exporter has complied with all the requirements.
+(c) the applicable duty, if any, has been paid or secured.
+
+Section 75 — Drawback on Imported Materials Used in Manufacture of Goods Exported
+Where any goods are imported into India for the purpose of being used in the manufacture of goods to be exported, drawback of customs duty paid on such imported goods may be allowed at the time of exportation.
+
+SECTION 5: GOODS AND SERVICES TAX (GST) ON EXPORTS
+
+Zero-Rated Supply: All exports of goods and services are treated as zero-rated supply under IGST Act.
+- Export under Bond/LUT: No IGST charged; input tax credit can be claimed as refund.
+- Export with IGST Payment: IGST paid on exports is refundable after filing returns.
+
+Refund Timeline: IGST refund on exports is processed through the Customs EDI system within 7 days of filing GSTR-3B.

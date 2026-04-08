@@ -1,24 +1,19 @@
-from fastapi import FastAPI, HTTPException, Header, Depends, UploadFile, File
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional, List
-import random
+from typing import Optional
 import os
 import json
 from dotenv import load_dotenv
-from backend.services.blockchain_service import blockchain_service
-from backend.services.blockchain_bridge import blockchain_bridge
-import hashlib
+import asyncio
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
 
 from backend.services.emission_calculator import (
-    EmissionCalculator, 
-    calculate_cbam_emissions,
-    ProductType,
-    RouteOption
+    EmissionCalculator
 )
 from backend.services.report_generator import (
     CBAMReportGenerator,
@@ -26,14 +21,15 @@ from backend.services.report_generator import (
     generate_report_id,
     REPORTLAB_AVAILABLE
 )
-from backend.services.ets_price_service import ets_service, get_ets_data
-from backend.services.ais_service import ais_service, get_live_vessels
+from backend.services.ets_price_service import ets_service
 from backend.services.auth_service import auth_service, get_current_user, get_optional_user
-from backend.services.real_data_service import real_data_service, get_live_carbon_price
-from backend.services.live_ais_service import live_ais_service, get_live_ais_vessels
-from backend.services.ai_sentinel import ai_sentinel
+from backend.services.real_data_service import real_data_service
 from backend.services.route_analyst import route_analyst
 from backend.services.legal_advisor import legal_advisor
+try:
+    from backend.india_steel_twin_router import router as india_steel_twin_router
+except ImportError:
+    from india_steel_twin_router import router as india_steel_twin_router
 
 app = FastAPI(
     title="CarbonShip API",
@@ -114,7 +110,11 @@ async def simulate_routes(params: SimulationParams):
     ai_recommendation = "IMEC Corridor" if ai_choice == 1 else "Suez Canal"
 
     # --- NETWORK RISK PREDICTION (AI-GNN) ---
-    from backend.services.network_risk import predict_network_risk
+    try:
+        from backend.services.network_risk import predict_network_risk
+    except ImportError:
+        from backend.services.network_risk import predict_network_risk
+    
     gnn_risks = await predict_network_risk(
         params.heatwave_level,
         params.conflict_level,
@@ -155,7 +155,14 @@ def read_root():
     return {"status": "Digital Twin Backend Online"}
 
 # --- CHATBOT ENDPOINT ---
-from backend.rag_system import chat_with_twin
+try:
+    from backend.rag_system import chat_with_twin
+except ImportError:
+    # Handle the case where it might be run from inside the backend folder
+    try:
+        from rag_system import chat_with_twin
+    except ImportError:
+        def chat_with_twin(m, c=""): return "Chat system unavailable."
 
 class ChatRequest(BaseModel):
     message: str
@@ -409,7 +416,7 @@ async def get_ship_types():
 @app.get("/cbam/ets-price")
 async def get_ets_price():
     """
-    Get current EU ETS carbon price (LIVE from KRBN proxy)
+    Get current EU ETS carbon price from the ICE EUA futures contract.
     """
     try:
         data = await ets_service.get_current_price()
@@ -419,7 +426,9 @@ async def get_ets_price():
             "currency": "EUR",
             "unit": "per tonne CO2",
             "last_updated": data.last_updated,
-            "source": data.source
+            "source": data.source,
+            "instrument": data.instrument,
+            "is_live": data.is_live,
         }
     except Exception:
         # Fallback to static config if live service fails
@@ -430,7 +439,9 @@ async def get_ets_price():
             "currency": ets_info["currency"],
             "unit": ets_info["unit"],
             "last_updated": ets_info["last_updated"],
-            "source": ets_info["source"]
+            "source": ets_info["source"],
+            "instrument": "fallback",
+            "is_live": False,
         }
 
 
@@ -667,7 +678,7 @@ async def get_live_ets_price():
     """
     Get live EU ETS carbon price
     
-    Updates from EU ETS market (cached for 1 hour).
+    Updates from the ICE EUA futures market (cached for 1 hour).
     Returns current price, 24h change, and 52-week range.
     """
     try:
@@ -680,7 +691,9 @@ async def get_live_ets_price():
                 "change_pct": data.change_pct_24h,
                 "high_52w": data.high_52w,
                 "low_52w": data.low_52w,
-                "average_30d": data.average_30d
+                "average_30d": data.average_30d,
+                "instrument": data.instrument,
+                "is_live": data.is_live,
             },
             "source": data.source,
             "last_updated": data.last_updated
@@ -724,60 +737,7 @@ async def get_ets_price_forecast(months: int = 6):
     }
 
 
-# ========================================
-# AIS VESSEL TRACKING ENDPOINTS
-# ========================================
 
-@app.get("/ais/vessels")
-async def get_ais_vessels():
-    """
-    Get live vessel positions on India-EU routes
-    
-    Returns simulated vessel data for demo (real AIS requires API key).
-    """
-    vessels = get_live_vessels()
-    return {
-        "success": True,
-        "vessels": vessels,
-        "count": len(vessels),
-        "routes_covered": ["INMUN_NLRTM_SUEZ", "INMUN_DEHAM_SUEZ", "INMUN_NLRTM_IMEC"]
-    }
-
-
-
-@app.get("/ais/vessels/geojson")
-async def get_vessels_geojson():
-    """
-    Get vessel positions in GeoJSON format for map overlay
-    """
-    return ais_service.get_vessels_geojson()
-
-
-@app.get("/ais/vessel/{mmsi}")
-async def get_vessel_by_mmsi(mmsi: str):
-    """
-    Get specific vessel by MMSI number
-    """
-    vessels = ais_service.get_simulated_vessels()
-    for rv in vessels:
-        if rv.vessel.mmsi == mmsi:
-            return {
-                "success": True,
-                "vessel": {
-                    "mmsi": rv.vessel.mmsi,
-                    "name": rv.vessel.name,
-                    "lat": rv.vessel.lat,
-                    "lng": rv.vessel.lng,
-                    "speed_knots": rv.vessel.speed_knots,
-                    "heading": rv.vessel.heading,
-                    "route": rv.route,
-                    "progress_pct": rv.progress_pct,
-                    "carbon_kg": rv.estimated_carbon_kg,
-                    "eta": rv.vessel.eta
-                }
-            }
-    
-    raise HTTPException(status_code=404, detail="Vessel not found")
 
 
 # ========================================
@@ -823,17 +783,6 @@ async def predict_fuel_consumption(request: PredictionRequest):
 class LegalQuery(BaseModel):
     query: str
 
-@app.get("/ai/sentinel")
-async def get_risk_analysis(force: bool = False):
-    """
-    Get AI-powered geopolitical risk analysis for shipping routes.
-    
-    Use ?force=true to bypass cache and get fresh analysis.
-    Cache lasts 10 minutes by default to prevent quota exhaustion.
-    """
-    return await ai_sentinel.analyze_risk(force=force)
-
-
 @app.get("/route/analyze")
 async def analyze_route(
     route_code: str = "INMUN_NLRTM_SUEZ", 
@@ -863,24 +812,10 @@ async def ask_legal_advisor(request: LegalQuery):
     Ask the AI Trade Legal Advisor a question about CBAM regulations.
     Grounded in official EU Regulation 2023/956 text.
     """
-    return await legal_advisor.ask_question(request.query)
-
-
-@app.post("/ai/parse-doc")
-async def parse_document(file: UploadFile = File(...)):
-    """
-    Parse a shipping document (Invoice, BOL, etc.) using LLaMA 3.2 Vision.
-    
-    Accepts: PDF, JPEG, PNG files
-    Returns: Extracted fields (product, HS code, weight, origin, destination)
-    """
-    from backend.services.doc_parser import doc_parser
-    
     try:
-        content = await file.read()
-        return await doc_parser.parse_document(content, file.content_type)
+        return await legal_advisor.ask_question(request.query)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Document parsing error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ========================================
@@ -972,10 +907,14 @@ async def get_oracle_data():
     """
     Get current Oracle data (trusted external feeds)
     """
+    ets_price = carbon_oracle.get_ets_price()
+    ets_snapshot = carbon_oracle.get_ets_metadata()
     return {
         "success": True,
         "oracle_data": {
-            "ets_price_eur": carbon_oracle.get_ets_price(),
+            "ets_price_eur": ets_price,
+            "ets_price_source": ets_snapshot["source"],
+            "ets_price_is_live": ets_snapshot["is_live"],
             "exchange_rate_eur_inr": carbon_oracle.exchange_rate_eur_inr,
             "emission_factors": carbon_oracle.emission_factors,
             "timestamp": carbon_oracle.get_timestamp()
@@ -1120,6 +1059,7 @@ async def get_dashboard_data(user: Optional[dict] = Depends(get_optional_user)):
     try:
         # Use async version — get_price_sync() causes event loop deadlock!
         ets_data = await ets_service.get_current_price()
+        vessel_count = len(real_data_service.get_real_vessel_data())
         
         dashboard = {
             "ets_price": {
@@ -1128,7 +1068,7 @@ async def get_dashboard_data(user: Optional[dict] = Depends(get_optional_user)):
                 "change_pct": ets_data.change_pct_24h
             },
             "vessels": {
-                "active_count": 5,  # Static count — AIS disabled
+                "active_count": vessel_count,
                 "routes_monitored": 3
             },
             "market": {
@@ -1156,206 +1096,24 @@ async def get_dashboard_data(user: Optional[dict] = Depends(get_optional_user)):
 
 
 # ========================================
-# REAL LIVE DATA ENDPOINTS
-# These fetch ACTUAL data from public sources
+# AI INTELLIGENCE LAYER
 # ========================================
 
-@app.get("/real/carbon-price")
-async def get_real_carbon_price():
-    """
-    Get REAL EU ETS carbon price from Yahoo Finance
-    
-    This fetches the actual ICE EUA Futures price (CFI2=F ticker)
-    NOT simulated data!
-    """
+@app.post("/ai/legal/full-context")
+async def ask_legal_full_context(request: LegalQuery):
     try:
-        import asyncio
-        price_data = await asyncio.to_thread(real_data_service.get_real_carbon_price_sync)
-        return {
-            "success": True,
-            "is_real_data": True,
-            "price": {
-                "eur": price_data.price_eur,
-                "source": price_data.source,
-                "is_live": price_data.is_live,
-                "timestamp": price_data.timestamp
-            },
-            "note": "This is REAL market data from Yahoo Finance (CFI2=F - ICE EUA Futures)"
-        }
+        data = await legal_advisor.ask_question(request.query)
+        return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-@app.get("/real/vessels")
-async def get_real_vessels():
-    """
-    Get REAL vessel information
-    
-    These are ACTUAL ships that operate on India-EU routes:
-    - MSC ANNA (MSC)
-    - EVER ACE (Evergreen)
-    - HMM ALGECIRAS (HMM)
-    - OOCL HONG KONG (OOCL)
-    - MAERSK MC-KINNEY MOLLER (Maersk)
-    
-    Positions are simulated but vessels are REAL!
-    """
+@app.post("/ai/legal/vector")
+async def ask_legal_vector(request: LegalQuery):
     try:
-        vessels = real_data_service.get_real_vessel_data()
-        return {
-            "success": True,
-            "is_real_data": True,
-            "vessels": vessels,
-            "count": len(vessels),
-            "note": "These are REAL vessels operating India-EU routes. Positions simulated for demo."
-        }
+        data = await legal_advisor.ask_vector_question(request.query)
+        return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-@app.get("/real/status")
-async def get_real_data_status():
-    """
-    Check status of real data integration
-    """
-    try:
-        import asyncio
-        price = await asyncio.to_thread(real_data_service.get_real_carbon_price_sync)
-        
-        return {
-            "success": True,
-            "real_data_sources": {
-                "eu_ets_price": {
-                    "source": "Yahoo Finance (CFI2=F)",
-                    "is_live": price.is_live,
-                    "last_price": price.price_eur
-                },
-                "vessels": {
-                    "source": "Real vessel names from major shipping lines",
-                    "operators": ["MSC", "Evergreen", "HMM", "OOCL", "Maersk"],
-                    "positions": "Simulated (real AIS requires API key)"
-                },
-                "emission_factors": {
-                    "source": "IPCC EFDB, GLEC Framework v3.0",
-                    "is_real": True
-                },
-                "ports": {
-                    "source": "Indian Ports Association, real coordinates",
-                    "is_real": True
-                }
-            }
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# ========================================
-# LIVE AIS TRACKING (AISStream.io)
-# ========================================
-
-@app.get("/live/ais")
-async def get_live_ais_tracking():
-    """
-    Get LIVE vessel positions from AISStream.io
-    
-    Uses your API key to fetch real-time positions of:
-    - MSC ANNA
-    - EVER ACE
-    - HMM ALGECIRAS
-    - OOCL HONG KONG
-    - MAERSK MC-KINNEY MOLLER
-    
-    These are REAL ships on India-EU routes!
-    """
-    try:
-        vessels = live_ais_service.get_tracked_vessels()
-        
-        live_count = sum(1 for v in vessels if v.get("is_live", False))
-        
-        return {
-            "success": True,
-            "data_source": "AISStream.io",
-            "vessels": vessels,
-            "count": len(vessels),
-            "live_count": live_count,
-            "note": f"{live_count} vessels with live positions, {len(vessels) - live_count} with simulated positions"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))# --- BLOCKCHAIN ROUTES ---
-
-@app.get("/blockchain/chain")
-async def get_blockchain_chain():
-    """Get the full local blockchain ledger."""
-    return {
-        "success": True,
-        "blocks": blockchain_service.chain,
-        "is_valid": True # Simple check for now
-    }
-
-@app.post("/blockchain/execute")
-async def execute_smart_contract(data: dict):
-    """
-    Simulate smart contract execution on the local ledger.
-    Then return a receipt that can be used for on-chain recording.
-    """
-    try:
-        exporter = data.get("exporter", "Internal")
-        product = data.get("product_type", "steel")
-        weight = data.get("weight_tonnes", 0)
-        
-        # Calculate emissions and tax for the record
-        results = calculate_cbam_emissions(product, weight)
-        
-        # Add to local ledger
-        index = blockchain_service.new_transaction(
-            exporter=exporter,
-            product=product,
-            emissions=results["total_co2_kg"],
-            tax=results["cbam_tax_eur"]
-        )
-        
-        # "Mine" the block
-        last_proof = blockchain_service.last_block['proof']
-        proof = blockchain_service.proof_of_work(last_proof)
-        previous_hash = blockchain_service.hash(blockchain_service.last_block)
-        block = blockchain_service.new_block(proof, previous_hash)
-        
-        receipt = {
-            "success": True,
-            "block_index": block['index'],
-            "block_hash": block['hash'], # We need to add hash to the block dict in the service if not there
-            "shipment_id": data.get("shipment_id", f"SHIP-{int(time.time())}"),
-            "total_co2_kg": results["total_co2_kg"],
-            "cbam_tax_eur": results["cbam_tax_eur"],
-            "ets_price_used": results["ets_price_used"],
-            "timestamp": datetime.now().isoformat()
-        }
-        
-        return {"success": True, "receipt": receipt}
-    except Exception as e:
-        logger.error(f"Blockchain execution failed: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/blockchain/bridge/status")
-async def get_bridge_status():
-    """Get the status of the hybrid (local + on-chain) blockchain system."""
-    return blockchain_bridge.get_blockchain_status()
-
-@app.post("/blockchain/bridge/sync")
-async def sync_on_chain_tx(data: dict):
-    """
-    Link a local shipment to its Ethereum transaction hash.
-    Body: {"shipment_id": "...", "tx_hash": "..."}
-    """
-    shipment_id = data.get("shipment_id")
-    tx_hash = data.get("tx_hash")
-    if not shipment_id or not tx_hash:
-        raise HTTPException(status_code=400, detail="Missing shipment_id or tx_hash")
-    
-    blockchain_bridge.record_on_chain_sync(shipment_id, tx_hash)
-    return {"success": True, "message": f"Shipment {shipment_id} linked to {tx_hash}"}
-
-@app.get("/blockchain/verify/{shipment_id}")
-async def verify_shipment(shipment_id: str):
-    """Verify a shipment across both ledger layers."""
-    return blockchain_bridge.verify_integrity(shipment_id)
+# --- India Steel Twin Routes ---
+app.include_router(india_steel_twin_router)

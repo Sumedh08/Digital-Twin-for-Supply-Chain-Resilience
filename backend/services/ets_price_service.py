@@ -1,17 +1,18 @@
-"""
-Live EU ETS Carbon Price Service
-Fetches real-time EU Emissions Trading System prices.
+"""Live EU ETS Carbon Price Service."""
 
-ARCHITECTURE NOTE:
-- yfinance is SYNCHRONOUS (uses requests internally)
-- All yfinance calls MUST run in asyncio.to_thread() to avoid deadlocking uvicorn
-- get_ets_price() returns cached data or a safe fallback — NEVER blocks
-"""
+from __future__ import annotations
 
 import asyncio
-from datetime import datetime, timedelta
-from typing import Optional, Dict, List
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Dict, List, Optional
+
+from backend.services.real_data_service import real_data_service
+from backend.services.yahoo_finance_client import fetch_chart
+
+
+ETS_SYMBOL = "CFI2=F"
+
 
 @dataclass
 class ETSPriceData:
@@ -23,121 +24,121 @@ class ETSPriceData:
     low_52w: float
     average_30d: float
     source: str
+    instrument: str
+    is_live: bool
     last_updated: str
 
-# Safe default data used before the first successful fetch
-_DEFAULT_PRICE = ETSPriceData(
-    current_price_eur=68.35,
-    price_date=datetime.now().strftime("%Y-%m-%d"),
-    change_24h=0.42,
-    change_pct_24h=0.62,
-    high_52w=81.20,
-    low_52w=54.10,
-    average_30d=67.85,
-    source="Default (pre-fetch)",
-    last_updated=datetime.now().isoformat()
-)
 
-def _fetch_yfinance_sync() -> ETSPriceData:
-    """
-    Synchronous yfinance fetch — MUST be called via asyncio.to_thread().
-    Never call this directly from an async function.
-    """
-    import yfinance as yf
-    import random
+def _history_to_rows(history_frame) -> List[Dict]:
+    timestamps = history_frame.get("timestamp", [])
+    closes = history_frame.get("indicators", {}).get("quote", [{}])[0].get("close", [])
+    history = []
 
-    try:
-        ticker = yf.Ticker("KRBN")  # KraneShares Global Carbon ETF
-        hist = ticker.history(period="1mo")
+    for timestamp, close_value in zip(timestamps, closes):
+        if close_value is None:
+            continue
+        history.append(
+            {
+                "date": datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d"),
+                "price": round(float(close_value), 2),
+            }
+        )
+    return history
 
-        if hist.empty:
-            raise Exception("No data from yfinance for KRBN")
 
-        MULTIPLIER = 2.05
+def _fetch_price_history_sync(period: str):
+    history = fetch_chart(ETS_SYMBOL, range_value=period)
+    rows = _history_to_rows(history)
+    if not rows:
+        raise RuntimeError(f"Yahoo Finance returned no close prices for {ETS_SYMBOL}.")
+    return history, rows
 
-        current_price = round(float(hist["Close"].iloc[-1]) * MULTIPLIER, 2)
-        yesterday_price = round(float(hist["Close"].iloc[-2]) * MULTIPLIER, 2) if len(hist) > 1 else current_price
 
-        hist_1y = ticker.history(period="1y")
-        high_52w = round(float(hist_1y["High"].max()) * MULTIPLIER, 2) if not hist_1y.empty else current_price + 10
-        low_52w = round(float(hist_1y["Low"].min()) * MULTIPLIER, 2) if not hist_1y.empty else current_price - 10
-        avg_30d = round(float(hist["Close"].mean()) * MULTIPLIER, 2)
+def _fetch_market_price_sync() -> ETSPriceData:
+    history, rows = _fetch_price_history_sync("1y")
+    meta = history.get("meta", {})
+    quote = history.get("indicators", {}).get("quote", [{}])[0]
 
-        change_24h = round(current_price - yesterday_price, 2)
-        change_pct = round((change_24h / yesterday_price) * 100, 2) if yesterday_price else 0
+    closes = [row["price"] for row in rows]
+    highs = [float(value) for value in quote.get("high", []) if value is not None]
+    lows = [float(value) for value in quote.get("low", []) if value is not None]
 
-        source_tag = "Yahoo Finance (KRBN Proxy)"
-
-    except Exception as e:
-        print(f"yfinance proxy failed: {e}. Falling back to dynamic simulation.")
-        base_price = 68.35
-        daily_change = round(random.uniform(-1.5, 1.5), 2)
-        current_price = round(base_price + daily_change, 2)
-        change_24h = daily_change
-        change_pct = round((change_24h / base_price) * 100, 2)
-        high_52w = 81.20
-        low_52w = 54.10
-        avg_30d = 67.85
-        source_tag = "Live Simulation Fallback"
+    current_price = round(float(meta.get("regularMarketPrice", closes[-1])), 2)
+    previous_close = round(float(closes[-2] if len(closes) > 1 else closes[-1]), 2)
+    change_24h = round(current_price - previous_close, 2)
+    change_pct = round((change_24h / previous_close) * 100, 2) if previous_close else 0.0
+    high_52w = round(float(meta.get("fiftyTwoWeekHigh", max(highs) if highs else current_price)), 2)
+    low_52w = round(float(meta.get("fiftyTwoWeekLow", min(lows) if lows else current_price)), 2)
+    trailing_month = closes[-30:] if len(closes) >= 30 else closes
+    average_30d = round(sum(trailing_month) / len(trailing_month), 2)
+    price_date = rows[-1]["date"]
+    now = datetime.now()
 
     return ETSPriceData(
         current_price_eur=current_price,
-        price_date=datetime.now().strftime("%Y-%m-%d"),
+        price_date=price_date,
         change_24h=change_24h,
         change_pct_24h=change_pct,
         high_52w=high_52w,
         low_52w=low_52w,
-        average_30d=avg_30d,
-        source=source_tag,
-        last_updated=datetime.now().isoformat()
+        average_30d=average_30d,
+        source="Yahoo Finance chart API (ICE EUA Futures CFI2=F)",
+        instrument=ETS_SYMBOL,
+        is_live=True,
+        last_updated=now.isoformat(),
     )
 
 
 class ETSPriceService:
-    def __init__(self):
-        self.cached_price: ETSPriceData = _DEFAULT_PRICE
+    def __init__(self) -> None:
+        self.cached_price: Optional[ETSPriceData] = None
         self.last_fetch: Optional[datetime] = None
 
     async def get_current_price(self) -> ETSPriceData:
         """
-        Get current ETS price. Uses 1-hour cache.
-        yfinance runs in a thread pool to never block the event loop.
+        Get current ETS price. Uses a 1-hour cache and performs blocking I/O in
+        a worker thread.
         """
-        if self.last_fetch and (datetime.now() - self.last_fetch).total_seconds() < 3600:
-            return self.cached_price
+        if self.last_fetch and self.cached_price:
+            if (datetime.now() - self.last_fetch).total_seconds() < 3600:
+                return self.cached_price
 
         try:
-            # Run blocking yfinance in a separate thread — this is the critical fix
-            price_data = await asyncio.to_thread(_fetch_yfinance_sync)
+            price_data = await asyncio.to_thread(_fetch_market_price_sync)
             self.cached_price = price_data
             self.last_fetch = datetime.now()
-        except Exception as e:
-            print(f"ETS fetch thread failed: {e}")
-            # Return whatever we have cached (safe default on first run)
+        except Exception as exc:  # noqa: BLE001
+            print(f"ETS live fetch failed: {exc}")
+            if self.cached_price is None:
+                fallback = await asyncio.to_thread(real_data_service.get_real_carbon_price_sync)
+                self.cached_price = ETSPriceData(
+                    current_price_eur=fallback.price_eur,
+                    price_date=datetime.now().strftime("%Y-%m-%d"),
+                    change_24h=0.0,
+                    change_pct_24h=0.0,
+                    high_52w=fallback.price_eur,
+                    low_52w=fallback.price_eur,
+                    average_30d=fallback.price_eur,
+                    source=fallback.source,
+                    instrument="CFI2=F",
+                    is_live=fallback.is_live,
+                    last_updated=fallback.timestamp,
+                )
+                self.last_fetch = datetime.now()
 
         return self.cached_price
 
     def get_price_history(self, days: int = 30) -> List[Dict]:
-        """
-        Get price history. This is only called from dedicated endpoints,
-        so we use a quick synchronous call but wrapped safely.
-        """
-        history = []
         try:
-            import yfinance as yf
-            ticker = yf.Ticker("KRBN")
-            hist = ticker.history(period=f"{days}d")
-            MULTIPLIER = 2.05
-            for date, row in hist.iterrows():
-                history.append({
-                    "date": date.strftime("%Y-%m-%d"),
-                    "price": round(float(row["Close"]) * MULTIPLIER, 2)
-                })
-        except Exception:
-            pass
-        return list(reversed(history))
+            bounded_days = max(1, min(days, 365))
+            _, rows = _fetch_price_history_sync(f"{bounded_days}d")
+            return rows[-bounded_days:]
+        except Exception as exc:  # noqa: BLE001
+            print(f"ETS history fetch failed: {exc}")
+            return []
 
     def get_price_forecast(self, months: int = 6) -> List[Dict]:
+        del months
         return []
 
 
@@ -146,12 +147,9 @@ ets_service = ETSPriceService()
 
 def get_ets_price() -> float:
     """
-    NON-BLOCKING price accessor for synchronous callers (e.g., emission_calculator).
-    Returns the cached price. NEVER triggers a network call.
+    Non-blocking accessor for synchronous callers. Returns the cached price only
+    and never triggers a network call.
     """
+    if not ets_service.cached_price:
+        return 0.0
     return ets_service.cached_price.current_price_eur
-
-
-def get_ets_data() -> Dict:
-    """NON-BLOCKING data accessor. Returns cached data."""
-    return asdict(ets_service.cached_price)

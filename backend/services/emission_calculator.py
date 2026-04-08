@@ -391,12 +391,12 @@ class EmissionCalculator:
         Returns:
             List of RouteComparison objects sorted by lowest emissions
         """
-        # Routes to compare (Mumbai to Rotterdam variants)
-        routes_to_compare = [
-            ("INMUN_NLRTM_SUEZ", 18),   # Suez: ~18 days
-            ("INMUN_NLRTM_IMEC", 14),   # IMEC: ~14 days
-            ("INMUN_NLRTM_CAPE", 28),   # Cape: ~28 days
-        ]
+        # Dynamically evaluate all routes in database
+        routes_to_compare = []
+        for code, data in self.factors.get("routes", {}).items():
+            dist = data.get("distance_km", 10000)
+            transit_days = int(dist / 840) + 2 # Avg 840km/day ship speed
+            routes_to_compare.append((code, transit_days))
         
         results = []
         ets_price = self.get_eu_ets_price()

@@ -1,29 +1,67 @@
 === EU CARBON BORDER ADJUSTMENT MECHANISM (CBAM) ===
-Regulation (EU) 2023/956 of the European Parliament
+Regulation (EU) 2023/956 of the European Parliament and of the Council of 10 May 2023
 
-ARTICLE 1 - SUBJECT MATTER
-This Regulation establishes a carbon border adjustment mechanism (CBAM) for addressing greenhouse gas emissions embedded in the goods listed in Annex I upon their importation into the customs territory of the Union.
+ARTICLE 1 — SUBJECT MATTER
+This Regulation establishes a carbon border adjustment mechanism (CBAM) for addressing greenhouse gas emissions embedded in the goods listed in Annex I upon their importation into the customs territory of the Union, in order to prevent the risk of carbon leakage.
 
-ARTICLE 2 - SCOPE
+ARTICLE 2 — SCOPE
 Applies to goods listed in Annex I:
 - Iron and Steel: CN 7206-7229
-- Aluminium: CN 7601-7616 
+- Aluminium: CN 7601-7616
 - Cement: CN 2523
 - Fertilisers: CN 2808, 2814, 3102-3105
 - Electricity: CN 2716
 - Hydrogen: CN 2804
 
-ARTICLE 6 - CBAM CERTIFICATE OBLIGATIONS
-Each authorized CBAM declarant shall, by 31 May of each year, surrender a number of CBAM certificates corresponding to the embedded emissions in goods imported during the preceding calendar year.
+ARTICLE 3 — DEFINITIONS
+(16) 'embedded emissions' means direct emissions released during the production of goods, and indirect emissions from the generation of electricity consumed during the production process;
+(17) 'direct emissions' means emissions from the production processes of goods, including heating, cooling, and emissions from waste gas treatment;
+(18) 'indirect emissions' means emissions from the generation of electricity consumed during the production of goods;
+(23) 'actual emissions' means emissions calculated based on primary data from the production processes;
+(24) 'default values' means values calculated or derived from secondary data, used when actual data is not available.
 
-TRANSITIONAL PERIOD (Oct 2023 - Dec 2025):
-- Importers must report embedded emissions quarterly.
-- No financial obligation during this period.
-- Default values may be used for up to 100% of emissions.
+ARTICLE 4 — IMPORTATION OF GOODS
+Goods listed in Annex I shall only be imported into the customs territory of the Union by an authorised CBAM declarant.
 
-DEFINITIVE PERIOD (from Jan 2026):
-- Financial obligations commence. CBAM certificates must be purchased.
+ARTICLE 5 — APPLICATION FOR AUTHORISATION
+Any person established in a Member State may apply for authorisation as a CBAM declarant. The application must include: (a) name, address, and tax identification number; (b) main activity; (c) certification that the person has committed no serious or repeated infringements of customs, taxation, or market abuse legislation.
+
+ARTICLE 6 — CBAM CERTIFICATE OBLIGATIONS
+6(1): Each authorised CBAM declarant shall, by 31 May of each year, surrender a number of CBAM certificates corresponding to the embedded emissions declared for the preceding calendar year.
+6(2): The CBAM certificates shall be purchased from the competent authority. The price shall be the average of the closing prices of EU Allowances on the EU ETS auction platform for each calendar week.
+6(3): Deduction for carbon price already paid in the country of origin: Where a carbon price has been effectively paid in the country of origin for the embedded emissions, the CBAM declarant may claim a reduction in the number of certificates to be surrendered.
+
+ARTICLE 7 — CALCULATION OF EMBEDDED EMISSIONS
+7(1): Embedded emissions in goods shall be calculated as the sum of: (a) direct emissions, and (b) indirect emissions.
+7(2): For iron and steel products, the calculation shall include: emissions from raw material processing, reduction (blast furnace), steelmaking (BOF/EAF), casting, and hot rolling. Transport between these stages is excluded.
+7(3): The Commission shall adopt implementing acts specifying: (a) default values for each goods category; (b) rules for applying actual emissions data; (c) conditions under which default values may be used.
+
+ARTICLE 8 — VERIFIED EMISSIONS
+An authorised CBAM declarant shall ensure that the total embedded emissions are verified by an accredited verifier in accordance with Articles 18 and 19.
+
+ARTICLE 10 — DEFAULT VALUES
+10(1): During the transitional period, default values may be used for up to 100% of emissions.
+10(2): From the definitive period: actual emissions data shall be used. Default values may only be used if actual data is not available despite best efforts.
+10(3): Default values shall be based on the best available data, including data from EU ETS installations.
+
+ARTICLE 35 — TRANSITIONAL PERIOD (October 2023 – December 2025)
+35(1): During the transitional period, importers must report on a quarterly basis.
+35(2): Each quarterly report shall contain: (a) the total quantity of each type of goods imported; (b) the total embedded emissions, distinguishing between direct and indirect; (c) the total indirect emissions; (d) the carbon price due in the country of origin, including any rebate or compensation.
+35(3): No financial obligation (no CBAM certificates) during this period.
+35(4): Reports must be submitted through the CBAM transitional registry.
+
+ARTICLE 36 — DEFINITIVE PERIOD (from January 2026)
+36(1): Financial obligations commence. CBAM certificates must be purchased and surrendered.
+36(2): Gradual phase-in alignment with phase-out of free ETS allowances: 2.5% in 2026, increasing to 100% by 2034.
+
+ANNEXES:
+Annex I — List of Goods Subject to CBAM (CN codes)
+Annex II — Countries and Territories Exempt (Iceland, Liechtenstein, Norway, Switzerland + territories applying EU ETS)
+Annex III — Methodology for Calculating Embedded Emissions
+Annex IV — Content of CBAM Declaration
 
 EXEMPTIONS (Article 2):
 - Goods originating in Iceland, Liechtenstein, Norway, Switzerland.
 - Goods with total value below EUR 150 in a consignment.
+- Goods in personal luggage of travellers below specific thresholds.
+- Military goods imported under government contracts.

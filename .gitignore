@@ -38,3 +38,6 @@ yarn-error.log*
 # Temporary files
 *.tmp
 .cache/
+
+# Local digital twin runtime
+backend/data/*.db

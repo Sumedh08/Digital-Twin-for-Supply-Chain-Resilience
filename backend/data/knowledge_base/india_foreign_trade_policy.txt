@@ -1,0 +1,40 @@
+=== INDIA FOREIGN TRADE POLICY 2023 — STEEL AND MINERALS FOCUS ===
+Source: DGFT Notification No. 01/2023 dated 31 March 2023
+
+CHAPTER 1: OBJECTIVES AND STRATEGY
+1.01: The FTP aims to make India a significant participant in world trade by 2030 through export diversification, market access improvement, and trade facilitation.
+1.02: Special focus on value-added manufacturing exports including steel, engineering goods, chemicals and pharmaceuticals.
+
+CHAPTER 2: STATUS HOLDER AND INCENTIVE FRAMEWORK
+2.01: Export houses are classified as One Star, Two Star, Three Star, Four Star, and Five Star Export Houses based on export performance.
+2.02: Benefits include priority processing of licences, self-certification for origin, and marketing support.
+
+CHAPTER 3: STEEL SECTOR SPECIFIC PROVISIONS
+
+3.1 — Advance Authorisation for Steel Manufacturers
+Steel manufacturers may import iron ore, coking coal, and ferroalloys duty-free under Advance Authorisation for producing HRC, CRC, and coated steel for export. Standard Input-Output Norms (SION) apply:
+- SION A-3003: Iron Ore Fines to Hot Rolled Coil — 1.62 tonnes input per tonne output.
+- SION A-3005: Coking Coal to Steel products — varies by process route (BF-BOF, EAF-IF).
+
+3.2 — Minimum Export Price (MEP)
+The Government may impose MEP on steel products when domestic availability is constrained. As of 2023, no MEP is active on any steel product category.
+
+3.3 — Steel Import Monitoring System (SIMS)
+Registration under SIMS is mandatory for import of steel products. While this is an import provision, it affects exporters by ensuring domestic price stability which impacts export competitiveness.
+
+CHAPTER 4: SPECIAL ECONOMIC ZONES (SEZ)
+4.01: Steel mills in SEZs enjoy: duty-free import of raw materials, exemption from GST on inter-unit transfers, simplified customs procedures.
+4.02: Net Foreign Exchange Earning (NFEE) requirement: SEZ units must achieve positive NFEE over a 5-year block period.
+
+CHAPTER 5: TRADE REMEDIES AND ANTI-DUMPING
+5.01: India's Directorate General of Trade Remedies (DGTR) investigates anti-dumping petitions from domestic industry.
+5.02: Export subsidies that could trigger countervailing duties in destination countries should be avoided. CBAM compliance falls under this consideration as EU may treat certain Indian subsidies as shadow carbon subsidies.
+
+CHAPTER 6: RULES OF ORIGIN
+6.01: India is party to multiple FTAs (ASEAN, Japan, South Korea, Australia, UAE). Each FTA has specific Rules of Origin for steel products.
+6.02: Certificate of Origin must be issued by authorised agencies (Export Inspection Council, FIEO, or designated Chambers of Commerce).
+6.03: Value Addition Criteria for steel under most FTAs: minimum 35-40% domestic value addition to qualify for preferential tariff.
+
+CHAPTER 7: LOGISTICS AND PORT PROVISIONS
+7.01: Major steel export ports: Paradip (Odisha), Visakhapatnam (Andhra Pradesh), Haldia (West Bengal), Mundra (Gujarat).
+7.02: Authorized Economic Operator (AEO) status available for steel exporters meeting compliance criteria. Benefits include deferred duty payment, reduced inspection, and priority processing.

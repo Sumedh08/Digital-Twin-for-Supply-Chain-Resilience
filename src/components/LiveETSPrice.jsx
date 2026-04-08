@@ -20,7 +20,11 @@ const LiveETSPrice = ({ compact = false }) => {
             const response = await fetch(`${API_BASE}/ets/live-price`);
             const data = await response.json();
             if (data.success) {
-                setPriceData(data.price);
+                setPriceData({
+                    ...data.price,
+                    source: data.source,
+                    last_updated: data.last_updated,
+                });
                 setLastUpdate(new Date().toLocaleTimeString());
             }
         } catch (err) {
@@ -159,8 +163,20 @@ const LiveETSPrice = ({ compact = false }) => {
                 </div>
 
                 <div className="sparkline-container" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    {renderSparkline()}
-                    <span className="sparkline-label" style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>7-day trend</span>
+                    {history.length >= 2 ? (
+                        <>
+                            {renderSparkline()}
+                            <span className="sparkline-label" style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>7-day trend</span>
+                        </>
+                    ) : (
+                        <span className="sparkline-label" style={{ fontSize: '12px', color: '#fbbf24', marginTop: '4px' }}>
+                            History temporarily unavailable
+                        </span>
+                    )}
+                </div>
+
+                <div style={{ marginTop: '12px', fontSize: '12px', color: '#94a3b8' }}>
+                    {priceData?.is_live ? 'Live contract' : 'Fallback data'}: {priceData?.instrument || 'CFI2=F'}
                 </div>
             </div>
 
@@ -182,6 +198,10 @@ const LiveETSPrice = ({ compact = false }) => {
             <div className="last-update" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#6b7280', marginTop: '8px' }}>
                 <Clock size={12} />
                 <span>Updated: {lastUpdate}</span>
+            </div>
+
+            <div style={{ marginTop: '4px', fontSize: '11px', color: '#64748b' }}>
+                Source: {priceData?.source || 'Unavailable'}
             </div>
         </div>
     );

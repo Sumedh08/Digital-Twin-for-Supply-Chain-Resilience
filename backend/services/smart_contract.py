@@ -19,6 +19,8 @@ from datetime import datetime
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Optional
 
+from backend.services.real_data_service import real_data_service
+
 # ============================================
 # BLOCKCHAIN CORE
 # ============================================
@@ -131,6 +133,8 @@ class CarbonOracle:
     
     def __init__(self):
         self.ets_price_eur = 85.0
+        self.ets_price_source = "Warm fallback"
+        self.ets_price_is_live = False
         self.exchange_rate_eur_inr = 89.5
         # GLEC Framework v3.0 emission factors (kg CO2 per tonne-km)
         self.emission_factors = {
@@ -149,8 +153,22 @@ class CarbonOracle:
         }
     
     def get_ets_price(self) -> float:
-        """Fetch current EU ETS price"""
+        """Fetch current EU ETS price from the shared live data service."""
+        try:
+            price = real_data_service.get_real_carbon_price_sync()
+            self.ets_price_eur = float(price.price_eur)
+            self.ets_price_source = price.source
+            self.ets_price_is_live = bool(price.is_live)
+        except Exception as exc:  # noqa: BLE001
+            print(f"Oracle ETS refresh failed: {exc}")
         return self.ets_price_eur
+
+    def get_ets_metadata(self) -> Dict[str, object]:
+        return {
+            "ets_price_eur": self.ets_price_eur,
+            "source": self.ets_price_source,
+            "is_live": self.ets_price_is_live,
+        }
     
     def get_emission_factor(self, transport_mode: str) -> float:
         """Get emission factor for transport mode"""

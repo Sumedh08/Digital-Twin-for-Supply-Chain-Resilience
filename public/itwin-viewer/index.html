@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>India Steel iTwin Viewer Bridge</title>
+    <link rel="stylesheet" href="/itwin-viewer/viewer.css" />
+  </head>
+  <body>
+    <main class="viewer-shell">
+      <header class="viewer-header">
+        <div>
+          <p class="viewer-kicker">iTwin.js Bridge</p>
+          <h1>India Steel Spatial Microfrontend</h1>
+        </div>
+        <span class="viewer-status" id="viewerStatus">Waiting for overlay</span>
+      </header>
+
+      <section class="viewer-card">
+        <div class="viewer-grid">
+          <article>
+            <h2>Integration path</h2>
+            <p>
+              This microfrontend is the handoff boundary where an official Bentley Web Viewer bootstraps
+              when `BENTLEY_ITWIN_ID` and `BENTLEY_IMODEL_ID` are available in the backend environment.
+            </p>
+          </article>
+          <article>
+            <h2>Current mode</h2>
+            <p id="viewerMode">Overlay stub active. Fallback globe remains the primary presenter.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="viewer-card">
+        <div class="viewer-network" id="viewerNetwork"></div>
+      </section>
+    </main>
+
+    <script src="/itwin-viewer/viewer.js"></script>
+  </body>
+</html>

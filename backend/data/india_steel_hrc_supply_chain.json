@@ -1,0 +1,435 @@
+{
+  "project": {
+    "id": "sail-multi-plant-hrc-digital-twin",
+    "title": "SAIL Multi-Plant Digital Twin for Hot-Rolled Coil Emissions",
+    "product": "hot_rolled_coil",
+    "product_label": "Hot-Rolled Coil (HRC)",
+    "product_unit": "tonnes",
+    "academic_scope": "Mine to export port",
+    "reporting_entity": "Steel Authority of India (SAIL) multi-plant export network",
+    "selection_rationale": [
+      "The model expands the previous single-corridor demo into a plant-aware SAIL network with four integrated plants.",
+      "Each plant is paired with three authored supplier scenarios so the twin can simulate sourcing tradeoffs instead of a single fixed inbound leg.",
+      "Coordinates are intentionally approximate public reference points to emphasize geographic spread while keeping the simulation transparent about inference quality."
+    ]
+  },
+  "sources": [
+    {
+      "id": "sail_plants_overview",
+      "title": "SAIL Plants Overview",
+      "url": "https://sail.co.in/en/plants/about-steel-plants",
+      "supports": [
+        "Integrated steel plant inventory",
+        "Bhilai, Bokaro, Rourkela, and Durgapur plant grounding"
+      ]
+    },
+    {
+      "id": "sail_bhilai",
+      "title": "Bhilai Steel Plant | SAIL",
+      "url": "https://sail.co.in/en/plants/about-bhilai-steel-plant",
+      "supports": [
+        "Bhilai steel plant location and integrated role"
+      ]
+    },
+    {
+      "id": "sail_mines",
+      "title": "Mines | SAIL",
+      "url": "https://sail.co.in/en/plants/mines",
+      "supports": [
+        "Captive mine inventory",
+        "Rowghat, Barsua, Kalta, Bolani, Kiriburu, Meghahatuburu, and Gua mine references"
+      ]
+    },
+    {
+      "id": "sail_rmd",
+      "title": "RMD and Collieries | SAIL",
+      "url": "https://sail.co.in/en/plants/rmd-and-collieries",
+      "supports": [
+        "Raw materials division context",
+        "Plant-to-mine pairing is an engineering inference across the captive mine network"
+      ]
+    },
+    {
+      "id": "jnpt_mumbai",
+      "title": "Jawaharlal Nehru Port Trust (JNPT)",
+      "url": "https://www.jnport.gov.in/",
+      "supports": [
+        "Primary western export gateway for all SAIL steel plants"
+      ]
+    },
+    {
+      "id": "cea_grid_2023",
+      "title": "CEA CO2 Baseline Database for the Indian Power Sector - Version 19",
+      "url": "https://cea.nic.in/cdm/?lang=en",
+      "supports": [
+        "Indian grid emission factor used for Scope 2"
+      ]
+    }
+  ],
+  "plants": {
+    "bhilai": {
+      "id": "plant:bhilai-steel-plant",
+      "label": "Bhilai Steel Plant",
+      "operator": "SAIL",
+      "state": "Chhattisgarh",
+      "district": "Durg",
+      "location_description": "Bhilai integrated steel complex",
+      "lat": 21.1938,
+      "lon": 81.3509,
+      "coordinate_quality": "Approximate public coordinate for the Bhilai steel cluster",
+      "port_id": "port:jnpt-mumbai",
+      "pellets_t_per_t_hrc": 1.54,
+      "liquid_steel_t_per_t_hrc": 1.04,
+      "pellet_thermal_gj_per_t_pellet": 0.77,
+      "pellet_electricity_mwh_per_t_pellet": 0.049,
+      "ironmaking_and_steelmaking_gj_per_t_hrc": 20.2,
+      "hot_rolling_gj_per_t_hrc": 1.21,
+      "electricity_mwh_per_t_hrc": 0.29,
+      "outbound_mode": "rail",
+      "outbound_distance_multiplier": 1.31,
+      "dispatch_unit_count": 3,
+      "dispatch_operator": "SAIL central dispatch fleet",
+      "technology_note": "Bhilai is modeled as a legacy but large integrated BF-BOF route with higher fuel intensity than the eastern plants."
+    },
+    "bokaro": {
+      "id": "plant:bokaro-steel-plant",
+      "label": "Bokaro Steel Plant",
+      "operator": "SAIL",
+      "state": "Jharkhand",
+      "district": "Bokaro",
+      "location_description": "Bokaro integrated flat-steel complex",
+      "lat": 23.6693,
+      "lon": 86.1511,
+      "coordinate_quality": "Approximate public coordinate for the Bokaro steel cluster",
+      "port_id": "port:jnpt-mumbai",
+      "pellets_t_per_t_hrc": 1.51,
+      "liquid_steel_t_per_t_hrc": 1.03,
+      "pellet_thermal_gj_per_t_pellet": 0.75,
+      "pellet_electricity_mwh_per_t_pellet": 0.048,
+      "ironmaking_and_steelmaking_gj_per_t_hrc": 19.7,
+      "hot_rolling_gj_per_t_hrc": 1.12,
+      "electricity_mwh_per_t_hrc": 0.27,
+      "outbound_mode": "rail",
+      "outbound_distance_multiplier": 1.26,
+      "dispatch_unit_count": 3,
+      "dispatch_operator": "SAIL eastern corridor dispatch",
+      "technology_note": "Bokaro is modeled as a relatively efficient flat-product route with strong rail connectivity toward the eastern port system."
+    },
+    "rourkela": {
+      "id": "plant:rourkela-steel-plant",
+      "label": "Rourkela Steel Plant",
+      "operator": "SAIL",
+      "state": "Odisha",
+      "district": "Sundargarh",
+      "location_description": "Rourkela integrated steel campus",
+      "lat": 22.2492,
+      "lon": 84.8828,
+      "coordinate_quality": "Approximate public coordinate for the Rourkela steel cluster",
+      "port_id": "port:jnpt-mumbai",
+      "pellets_t_per_t_hrc": 1.49,
+      "liquid_steel_t_per_t_hrc": 1.03,
+      "pellet_thermal_gj_per_t_pellet": 0.74,
+      "pellet_electricity_mwh_per_t_pellet": 0.047,
+      "ironmaking_and_steelmaking_gj_per_t_hrc": 19.3,
+      "hot_rolling_gj_per_t_hrc": 1.08,
+      "electricity_mwh_per_t_hrc": 0.26,
+      "outbound_mode": "rail",
+      "outbound_distance_multiplier": 1.24,
+      "dispatch_unit_count": 3,
+      "dispatch_operator": "SAIL Odisha dispatch network",
+      "technology_note": "Rourkela is modeled as the lowest-intensity plant in this v1 SAIL twin because of shorter mine corridors and a slightly tighter process-energy envelope."
+    },
+    "durgapur": {
+      "id": "plant:durgapur-steel-plant",
+      "label": "Durgapur Steel Plant",
+      "operator": "SAIL",
+      "state": "West Bengal",
+      "district": "Paschim Bardhaman",
+      "location_description": "Durgapur integrated steel complex",
+      "lat": 23.5204,
+      "lon": 87.3119,
+      "coordinate_quality": "Approximate public coordinate for the Durgapur steel cluster",
+      "port_id": "port:jnpt-mumbai",
+      "pellets_t_per_t_hrc": 1.52,
+      "liquid_steel_t_per_t_hrc": 1.04,
+      "pellet_thermal_gj_per_t_pellet": 0.76,
+      "pellet_electricity_mwh_per_t_pellet": 0.048,
+      "ironmaking_and_steelmaking_gj_per_t_hrc": 19.9,
+      "hot_rolling_gj_per_t_hrc": 1.15,
+      "electricity_mwh_per_t_hrc": 0.28,
+      "outbound_mode": "rail",
+      "outbound_distance_multiplier": 1.21,
+      "dispatch_unit_count": 3,
+      "dispatch_operator": "SAIL eastern corridor dispatch",
+      "technology_note": "Durgapur is modeled as a higher-distance eastern export network because its selected mine basket sits farther west than the port leg."
+    }
+  },
+  "suppliers": {
+    "rowghat": {
+      "id": "supplier:rowghat-iron-ore-mine",
+      "label": "Rowghat Iron Ore Mine",
+      "operator": "SAIL",
+      "state": "Chhattisgarh",
+      "district": "Kanker",
+      "location_description": "Rowghat iron ore mining belt",
+      "lat": 19.52,
+      "lon": 81.22,
+      "coordinate_quality": "Approximate public coordinate for the Rowghat mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.69,
+      "diesel_l_per_t_ore": 0.95,
+      "electricity_kwh_per_t_ore": 10.6,
+      "supplier_emission_story": "Rowghat is modeled as a comparatively efficient mine-to-plant source for Bhilai thanks to a shorter central India corridor.",
+      "inference_note": "Mine-level CO2 intensity is an engineering estimate based on Indian iron ore mining practice; public SAIL pages do not publish cradle-to-gate mine emission factors."
+    },
+    "dalli_rajhara": {
+      "id": "supplier:dalli-rajhara-iron-ore-complex",
+      "label": "Dalli Rajhara Iron Ore Complex",
+      "operator": "SAIL",
+      "state": "Chhattisgarh",
+      "district": "Balod",
+      "location_description": "Dalli Rajhara mining belt serving central India steelmaking",
+      "lat": 20.58,
+      "lon": 81.09,
+      "coordinate_quality": "Approximate public coordinate for the Dalli Rajhara mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.72,
+      "diesel_l_per_t_ore": 1.08,
+      "electricity_kwh_per_t_ore": 11.8,
+      "supplier_emission_story": "Dalli Rajhara is modeled as a shorter-haul but more diesel-heavy source than Rowghat.",
+      "inference_note": "The dispatch profile is inferred from a mature mine-to-plant corridor rather than a published mine-specific dispatch mix."
+    },
+    "barsua": {
+      "id": "supplier:barsua-iron-ore-mine",
+      "label": "Barsua Iron Ore Mine",
+      "operator": "SAIL",
+      "state": "Odisha",
+      "district": "Sundargarh",
+      "location_description": "Barsua mining cluster in the Odisha mineral belt",
+      "lat": 22.13,
+      "lon": 85.21,
+      "coordinate_quality": "Approximate public coordinate for the Barsua mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.65,
+      "diesel_l_per_t_ore": 0.79,
+      "electricity_kwh_per_t_ore": 10.2,
+      "supplier_emission_story": "Barsua is modeled as a lower-emission rail-led supplier in the eastern mineral belt.",
+      "inference_note": "Public SAIL sources identify Barsua as a captive mine but do not publish a mine-specific carbon intensity."
+    },
+    "kalta": {
+      "id": "supplier:kalta-iron-ore-mine",
+      "label": "Kalta Iron Ore Mine",
+      "operator": "SAIL",
+      "state": "Odisha",
+      "district": "Sundargarh",
+      "location_description": "Kalta mine cluster near the Rourkela raw-materials network",
+      "lat": 22.31,
+      "lon": 85.13,
+      "coordinate_quality": "Approximate public coordinate for the Kalta mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.64,
+      "diesel_l_per_t_ore": 0.74,
+      "electricity_kwh_per_t_ore": 9.9,
+      "supplier_emission_story": "Kalta is modeled as the tightest Rourkela inbound corridor in this catalog.",
+      "inference_note": "The lower factor is an engineering inference from a shorter corridor and rail-dominant dispatch assumption."
+    },
+    "bolani": {
+      "id": "supplier:bolani-iron-ore-mine",
+      "label": "Bolani Iron Ore Mine",
+      "operator": "SAIL",
+      "state": "Odisha",
+      "district": "Keonjhar",
+      "location_description": "Bolani ore belt in northern Odisha",
+      "lat": 22.1,
+      "lon": 85.35,
+      "coordinate_quality": "Approximate public coordinate for the Bolani mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.67,
+      "diesel_l_per_t_ore": 0.83,
+      "electricity_kwh_per_t_ore": 10.5,
+      "supplier_emission_story": "Bolani is modeled as a medium-distance eastern source with balanced mine energy intensity.",
+      "inference_note": "The transport profile is inferred from geography and rail-heavy captive-mine logistics."
+    },
+    "kiriburu": {
+      "id": "supplier:kiriburu-iron-ore-mine",
+      "label": "Kiriburu Iron Ore Mine",
+      "operator": "SAIL",
+      "state": "Jharkhand",
+      "district": "West Singhbhum",
+      "location_description": "Kiriburu mining cluster in the Singhbhum belt",
+      "lat": 22.09,
+      "lon": 85.3,
+      "coordinate_quality": "Approximate public coordinate for the Kiriburu mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.63,
+      "diesel_l_per_t_ore": 0.71,
+      "electricity_kwh_per_t_ore": 9.8,
+      "supplier_emission_story": "Kiriburu is modeled as a benchmark low-emission source for Bokaro and Durgapur due to rail-linked eastern dispatch.",
+      "inference_note": "The lower dispatch factor is inferred from geography and the broader SAIL raw-materials network."
+    },
+    "meghahatuburu": {
+      "id": "supplier:meghahatuburu-iron-ore-mine",
+      "label": "Meghahatuburu Iron Ore Mine",
+      "operator": "SAIL",
+      "state": "Jharkhand",
+      "district": "West Singhbhum",
+      "location_description": "Meghahatuburu mining belt in the Singhbhum iron ore range",
+      "lat": 22.18,
+      "lon": 85.29,
+      "coordinate_quality": "Approximate public coordinate for the Meghahatuburu mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.66,
+      "diesel_l_per_t_ore": 0.76,
+      "electricity_kwh_per_t_ore": 10.1,
+      "supplier_emission_story": "Meghahatuburu is modeled as a balanced eastern source with slightly higher mine energy intensity than Kiriburu.",
+      "inference_note": "Mine-specific carbon values are not publicly disclosed; the scenario uses an engineering estimate."
+    },
+    "gua": {
+      "id": "supplier:gua-iron-ore-mine",
+      "label": "Gua Iron Ore Mine",
+      "operator": "SAIL",
+      "state": "Jharkhand",
+      "district": "West Singhbhum",
+      "location_description": "Gua mine cluster in the Singhbhum range",
+      "lat": 22.21,
+      "lon": 85.39,
+      "coordinate_quality": "Approximate public coordinate for the Gua mining cluster",
+      "ore_requirement_t_per_t_hrc": 1.68,
+      "diesel_l_per_t_ore": 0.82,
+      "electricity_kwh_per_t_ore": 10.7,
+      "supplier_emission_story": "Gua is modeled as the higher-distance Bokaro option with moderate mine energy demand.",
+      "inference_note": "The dispatch and carbon factors are engineering assumptions built for scenario comparison rather than official mine disclosures."
+    }
+  },
+  "ports": {
+    "jnpt": {
+      "id": "port:jnpt-mumbai",
+      "label": "Jawaharlal Nehru Port (JNPT Mumbai)",
+      "operator": "Jawaharlal Nehru Port Authority",
+      "state": "Maharashtra",
+      "location_description": "India's largest container port on the western coast, near Navi Mumbai",
+      "lat": 18.9500,
+      "lon": 72.9500,
+      "coordinate_quality": "Approximate public coordinate for JNPT container terminal",
+      "terminal_reference": "Primary western export gateway for SAIL steel products",
+      "port_handling_mwh_per_t_hrc": 0.0025
+    }
+  },
+  "plantSupplierScenarios": [
+    {
+      "scenarioId": "bhilai_rowghat",
+      "plantId": "plant:bhilai-steel-plant",
+      "supplierId": "supplier:rowghat-iron-ore-mine",
+      "label": "Rowghat to Bhilai",
+      "story": "Lower-distance central India corridor with comparatively stable inbound emissions.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.18
+    },
+    {
+      "scenarioId": "bhilai_dalli_rajhara",
+      "plantId": "plant:bhilai-steel-plant",
+      "supplierId": "supplier:dalli-rajhara-iron-ore-complex",
+      "label": "Dalli Rajhara to Bhilai",
+      "story": "Short-haul alternative with higher mine diesel intensity than the Rowghat path.",
+      "modeToPlant": "road_truck",
+      "distanceMultiplier": 1.24
+    },
+    {
+      "scenarioId": "bhilai_barsua",
+      "plantId": "plant:bhilai-steel-plant",
+      "supplierId": "supplier:barsua-iron-ore-mine",
+      "label": "Barsua to Bhilai",
+      "story": "A farther eastern sourcing option that increases realism and supply complexity for Bhilai.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.41
+    },
+    {
+      "scenarioId": "bokaro_kiriburu",
+      "plantId": "plant:bokaro-steel-plant",
+      "supplierId": "supplier:kiriburu-iron-ore-mine",
+      "label": "Kiriburu to Bokaro",
+      "story": "Benchmark eastern rail corridor with the lowest modeled upstream intensity for Bokaro.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.27
+    },
+    {
+      "scenarioId": "bokaro_meghahatuburu",
+      "plantId": "plant:bokaro-steel-plant",
+      "supplierId": "supplier:meghahatuburu-iron-ore-mine",
+      "label": "Meghahatuburu to Bokaro",
+      "story": "Balanced eastern route with slightly higher mine energy use than Kiriburu.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.31
+    },
+    {
+      "scenarioId": "bokaro_gua",
+      "plantId": "plant:bokaro-steel-plant",
+      "supplierId": "supplier:gua-iron-ore-mine",
+      "label": "Gua to Bokaro",
+      "story": "Higher-distance inbound corridor that creates a useful comparison against the tighter Singhbhum suppliers.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.36
+    },
+    {
+      "scenarioId": "rourkela_barsua",
+      "plantId": "plant:rourkela-steel-plant",
+      "supplierId": "supplier:barsua-iron-ore-mine",
+      "label": "Barsua to Rourkela",
+      "story": "Short eastern raw-material corridor with lower modeled dispatch emissions.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.18
+    },
+    {
+      "scenarioId": "rourkela_kalta",
+      "plantId": "plant:rourkela-steel-plant",
+      "supplierId": "supplier:kalta-iron-ore-mine",
+      "label": "Kalta to Rourkela",
+      "story": "Tightest inbound corridor for Rourkela and the expected low-carbon benchmark in this plant basket.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.14
+    },
+    {
+      "scenarioId": "rourkela_bolani",
+      "plantId": "plant:rourkela-steel-plant",
+      "supplierId": "supplier:bolani-iron-ore-mine",
+      "label": "Bolani to Rourkela",
+      "story": "Moderate-distance Odisha route that broadens the plant's supplier spread.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.28
+    },
+    {
+      "scenarioId": "durgapur_kiriburu",
+      "plantId": "plant:durgapur-steel-plant",
+      "supplierId": "supplier:kiriburu-iron-ore-mine",
+      "label": "Kiriburu to Durgapur",
+      "story": "Efficient eastern source with a long but rail-friendly inbound corridor.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.34
+    },
+    {
+      "scenarioId": "durgapur_meghahatuburu",
+      "plantId": "plant:durgapur-steel-plant",
+      "supplierId": "supplier:meghahatuburu-iron-ore-mine",
+      "label": "Meghahatuburu to Durgapur",
+      "story": "Similar to Kiriburu but with slightly higher mine energy intensity and a marginally longer path.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.37
+    },
+    {
+      "scenarioId": "durgapur_barsua",
+      "plantId": "plant:durgapur-steel-plant",
+      "supplierId": "supplier:barsua-iron-ore-mine",
+      "label": "Barsua to Durgapur",
+      "story": "A farther Odisha source that improves geographic spread and creates a more demanding inbound network.",
+      "modeToPlant": "rail",
+      "distanceMultiplier": 1.45
+    }
+  ],
+  "factors": {
+    "grid_tco2_per_mwh": 0.716,
+    "diesel_tco2_per_litre": 0.00268,
+    "solid_fuel_tco2_per_gj": 0.0946,
+    "reheat_fuel_tco2_per_gj": 0.0561,
+    "rail_tco2_per_tkm": 0.000028,
+    "road_truck_tco2_per_tkm": 0.000064,
+    "distance_method": "Great-circle distance multiplied by a corridor factor to approximate rail and road routing."
+  },
+  "execution_defaults": {
+    "default_batch_tonnes": 1000.0,
+    "default_plant_id": "plant:bhilai-steel-plant",
+    "simulation_start_timestamp": "2026-03-24T09:00:00+05:30"
+  }
+}

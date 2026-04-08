@@ -1,0 +1,8 @@
+{
+  "source_directories": [
+    "."
+  ],
+  "exclude": [
+    ".*/node_modules/.*"
+  ]
+}
