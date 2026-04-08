@@ -9,8 +9,9 @@ Data Sources:
 """
 
 import json
+import math
 import os
-from typing import Optional, Dict, List
+from typing import Any, Optional, Dict, List
 from dataclasses import dataclass
 from enum import Enum
 
@@ -161,6 +162,230 @@ class EmissionCalculator:
             return get_ets_price()  # Returns cached price, never blocks
         except Exception:
             return self.factors.get("eu_ets", {}).get("current_price_eur", 68.35)
+
+    # -----------------------------------------------------------------------
+    # UPGRADE: SFOC Cubic Speed Model (IMO Fourth GHG Study 2020)
+    # -----------------------------------------------------------------------
+
+    #: Fuel profiles — CO2 factor (TtW) and Well-to-Wake multiplier
+    #: Sources: IMO Fourth GHG Study 2020 Table 4; IPCC AR6 WG3 Annex II
+    FUEL_PROFILES: Dict[str, Dict[str, float]] = {
+        "HFO":      {"co2_factor": 3.114, "wtw": 1.13, "cost_per_tonne": 485.0},
+        "VLSFO":    {"co2_factor": 3.151, "wtw": 1.13, "cost_per_tonne": 620.0},
+        "LNG":      {"co2_factor": 2.750, "wtw": 1.22, "cost_per_tonne": 850.0},
+        "Bio-LNG":  {"co2_factor": 0.420, "wtw": 0.16, "cost_per_tonne": 1400.0},
+        "Methanol": {"co2_factor": 1.375, "wtw": 0.49, "cost_per_tonne": 780.0},
+        "GreenNH3": {"co2_factor": 0.002, "wtw": 0.01, "cost_per_tonne": 1800.0},
+    }
+
+    #: Base SFOC (g/kWh) at design speed — IMO GHG Study 2020, Table 11
+    _BASE_SFOC: Dict[str, float] = {
+        "container_ship": 175.0,
+        "bulk_carrier":   162.0,
+        "oil_tanker":     170.0,
+        "roro_cargo":     185.0,
+        "general_cargo":  168.0,
+    }
+    _DESIGN_SPEED_KN: float = 18.0   # normalisation reference speed
+    _REP_ENGINE_KW:   float = 15_000  # representative main engine
+
+    def compute_sfoc_transport_co2(
+        self,
+        weight_tonnes: float,
+        distance_km: float,
+        speed_knots: float = 18.5,
+        ship_type: str = "container_ship",
+        fuel_type: str = "HFO",
+    ) -> Dict[str, float]:
+        """
+        SFOC-based transport emission model per IMO Fourth GHG Study 2020.
+
+        Key insight — the cubic speed-fuel relationship:
+          Fuel consumption ∝ (speed / design_speed)³
+          Reducing speed 10 % → 27 % fuel reduction
+
+        Formula
+        -------
+        SFOC(v) = SFOC_design × (v / v_design)³           [g/kWh]
+        hours   = distance_nm / speed_knots
+        fuel_t  = (P_kW × hours × SFOC) / 1 000 000       [tonnes]
+        TtW_CO₂ = fuel_t × CO2_factor                     [tCO₂]
+        WtW_CO₂ = TtW_CO₂ × WtW_multiplier               [tCO₂]
+
+        Parameters
+        ----------
+        weight_tonnes : Cargo weight (used for intensity calculation)
+        distance_km   : Sea leg distance in kilometres
+        speed_knots   : Vessel speed in knots
+        ship_type     : Key into _BASE_SFOC
+        fuel_type     : Key into FUEL_PROFILES
+
+        Returns
+        -------
+        dict with ttw_co2, wtw_co2, intensity_gco2_per_tkm, fuel_tonnes_consumed
+        """
+        profile = self.FUEL_PROFILES.get(fuel_type, self.FUEL_PROFILES["HFO"])
+        sfoc_design = self._BASE_SFOC.get(ship_type, 175.0)
+
+        speed_ratio = speed_knots / self._DESIGN_SPEED_KN
+        sfoc = sfoc_design * (speed_ratio ** 3)           # g/kWh — cubic law
+
+        distance_nm = distance_km / 1.852
+        hours       = distance_nm / speed_knots
+        fuel_tonnes = (self._REP_ENGINE_KW * hours * sfoc) / 1_000_000
+
+        ttw_co2 = fuel_tonnes * profile["co2_factor"]
+        wtw_co2 = ttw_co2    * profile["wtw"]
+
+        distance_km_safe = max(distance_km, 1.0)
+        intensity = (wtw_co2 * 1_000_000) / (weight_tonnes * distance_km_safe)
+
+        return {
+            "ttw_co2_tonnes":       round(ttw_co2, 4),
+            "wtw_co2_tonnes":       round(wtw_co2, 4),
+            "intensity_gco2_tkm":  round(intensity, 2),
+            "fuel_tonnes_consumed": round(fuel_tonnes, 4),
+            "sfoc_g_per_kwh":      round(sfoc, 1),
+            "speed_knots":         speed_knots,
+            "fuel_type":           fuel_type,
+            "note": (
+                "WtW = Well-to-Wake (includes upstream fuel production emissions). "
+                "Cubic SFOC model per IMO Fourth GHG Study 2020."
+            ),
+        }
+
+    # -----------------------------------------------------------------------
+    # UPGRADE: Scope 4 — Avoided Emissions (ISO 14044 §4.2.3.4)
+    # -----------------------------------------------------------------------
+
+    def compute_scope4_avoided(
+        self,
+        chosen_route_co2: float,
+        reference_route_co2: float,
+        air_freight_co2_equiv: float = 0.0,
+    ) -> Dict[str, float]:
+        """
+        Calculate Scope 4 (avoided) emissions per ISO 14044 Section 4.2.3.4.
+
+        Scope 4 represents emissions prevented by choosing a greener option
+        relative to a counterfactual reference pathway.  The EU taxonomy
+        (Delegated Act 2021/2139) recognises avoided emissions as relevant
+        for 'substantial contribution' determination.
+
+        Parameters
+        ----------
+        chosen_route_co2  : tCO₂ of the selected route
+        reference_route_co2 : tCO₂ of the counterfactual (e.g., worst route)
+        air_freight_co2_equiv : tCO₂ if shipped by air (Scope 4 vs. air)
+
+        Returns
+        -------
+        dict — positive values = emissions avoided
+        """
+        vs_worst   = reference_route_co2   - chosen_route_co2
+        vs_air     = air_freight_co2_equiv - chosen_route_co2 if air_freight_co2_equiv else None
+        return {
+            "scope4_vs_worst_route_tco2": round(vs_worst, 3),
+            "scope4_vs_air_freight_tco2": round(vs_air, 3) if vs_air is not None else "n/a",
+            "iso_reference":  "ISO 14044:2006 Section 4.2.3.4",
+            "interpretation":  (
+                "Positive = emissions avoided vs. reference. "
+                "Negative = this route emits more than reference."
+            ),
+        }
+
+    # -----------------------------------------------------------------------
+    # UPGRADE: Slow-Steam Speed Optimizer (golden-section search)
+    # -----------------------------------------------------------------------
+
+    def optimal_slow_steam_speed(
+        self,
+        distance_km: float,
+        cargo_weight_tonnes: float,
+        ship_type: str = "container_ship",
+        fuel_type: str = "HFO",
+        deadline_days: float = 30.0,
+        ets_price_eur: float = 85.0,
+        charter_rate_usd_per_day: float = 35_000.0,
+        fuel_price_usd_per_tonne: float = 485.0,
+    ) -> Dict[str, Any]:
+        """
+        Find the optimal vessel speed that minimises total voyage cost:
+            total_cost = fuel_cost + CBAM_tax + delay_penalty
+
+        Uses golden-section search — O(log n), no external library needed.
+
+        Key formula
+        -----------
+        Because fuel ∝ speed³, there is always a minimum-cost speed below
+        maximum speed.  This is the core insight behind maritime slow steaming,
+        which carriers apply industrially to reduce both cost and CBAM liability.
+
+        Parameters
+        ----------
+        distance_km              : Total sea leg distance
+        cargo_weight_tonnes      : Cargo payload
+        ship_type                : Vessel category
+        fuel_type                : Fuel type (see FUEL_PROFILES)
+        deadline_days            : Contract delivery deadline in days
+        ets_price_eur            : EU ETS carbon price (EUR/tonne CO₂)
+        charter_rate_usd_per_day : Cost of vessel delay (USD/day)
+        fuel_price_usd_per_tonne : Current bunker price (USD/tonne)
+
+        Returns
+        -------
+        dict with optimal_speed_knots, cost components, and CO₂ savings
+        """
+        USD_EUR = 0.93  # approximate
+
+        def total_cost_usd(speed_kn: float) -> float:
+            em   = self.compute_sfoc_transport_co2(
+                cargo_weight_tonnes, distance_km, speed_kn, ship_type, fuel_type)
+            fuel_t     = em["fuel_tonnes_consumed"]
+            co2_t      = em["wtw_co2_tonnes"]
+            voyage_d   = (distance_km / 1.852) / (speed_kn * 24.0)
+            fuel_cost  = fuel_t * fuel_price_usd_per_tonne
+            cbam_usd   = co2_t  * ets_price_eur / USD_EUR  # EUR→USD
+            delay_d    = max(0.0, voyage_d - deadline_days)
+            delay_pen  = delay_d * charter_rate_usd_per_day
+            return fuel_cost + cbam_usd + delay_pen
+
+        # Golden-section search in [12, 22] knots
+        # Lower bound = 12 kn: practical minimum per IMO CII planning guidance
+        # and hull biofouling efficiency studies (Yeginbayeva et al. 2018)
+        φ   = (math.sqrt(5.0) - 1.0) / 2.0
+        a, b = 12.0, 22.0
+        for _ in range(60):
+            c = b - φ * (b - a)
+            d = a + φ * (b - a)
+            if total_cost_usd(c) < total_cost_usd(d):
+                b = d
+            else:
+                a = c
+        opt_speed = round((a + b) / 2.0, 1)
+
+        fast_cost = total_cost_usd(22.0)
+        opt_cost  = total_cost_usd(opt_speed)
+        opt_em    = self.compute_sfoc_transport_co2(
+            cargo_weight_tonnes, distance_km, opt_speed, ship_type, fuel_type)
+        fast_em   = self.compute_sfoc_transport_co2(
+            cargo_weight_tonnes, distance_km, 22.0, ship_type, fuel_type)
+
+        return {
+            "optimal_speed_knots":      opt_speed,
+            "voyage_days_at_optimal":   round((distance_km / 1.852) / (opt_speed * 24), 1),
+            "voyage_days_at_max(22kn)": round((distance_km / 1.852) / (22.0 * 24), 1),
+            "total_cost_saving_usd":    round(fast_cost - opt_cost, 0),
+            "co2_saving_wtw_tonnes":    round(fast_em["wtw_co2_tonnes"] - opt_em["wtw_co2_tonnes"], 3),
+            "cbam_saving_eur":          round(
+                (fast_em["wtw_co2_tonnes"] - opt_em["wtw_co2_tonnes"]) * ets_price_eur, 2),
+            "sfoc_at_optimal":          opt_em["sfoc_g_per_kwh"],
+            "methodology":              (
+                "Golden-section search minimising: "
+                "fuel_cost + CBAM_tax + delay_penalty.  "
+                "Cubic SFOC model per IMO Fourth GHG Study 2020."
+            ),
+        }
     
     def calculate_manufacturing_emissions(
         self, 
